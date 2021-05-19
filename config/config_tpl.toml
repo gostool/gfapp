@@ -10,6 +10,10 @@
     Path        = "/tmp/log/gf-app"
     Level       = "all"
     Stdout      = true
+    [logger.debug]
+        path   = "/tmp/log/gf-app/debug"
+        level  = "dev"
+        stdout = true
 
 # Template.
 [viewer]

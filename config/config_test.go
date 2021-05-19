@@ -8,7 +8,6 @@ import (
 func TestCfg(t *testing.T) {
 	address := g.Config().Get("server.Address")
 	t.Logf("Address:%v\n", address)
-	g.Log("abc")
 }
 
 func TestCfgSetPath(t *testing.T) {
@@ -18,4 +17,12 @@ func TestCfgSetPath(t *testing.T) {
 		t.Logf("addr(%v) != :8299 in config_tpl.toml", address)
 		t.Fail()
 	}
+}
+
+func TestLogger(t *testing.T) {
+	g.Cfg().SetFileName("config_tpl.toml")
+	// 多个日志实例
+	// 1.默认日志
+	g.Log().Info("i am in logger default")
+	g.Log("debug").Info("i am in logger debug")
 }
