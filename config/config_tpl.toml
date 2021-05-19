@@ -30,3 +30,13 @@
         Path   = "/tmp/log/gf-app/sql"
         Level  = "all"
         Stdout = true
+# gf gen mode/dao
+[gfcli]
+      # 根据配置的test数据库中的user/post表生成dao文件
+      [[gfcli.gen.dao]]
+          link  = "mysql:root:12345678@tcp(127.0.0.1:3306)/test"
+          tables = "user,post"
+      # 根据配置的test数据库中的user/post表生成model文件
+      [[gfcli.gen.model]]
+          link  = "mysql:root:12345678@tcp(127.0.0.1:3306)/test"
+          tables = "user,post"
