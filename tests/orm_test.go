@@ -44,3 +44,17 @@ func TestWhere(t *testing.T) {
 	}
 	g.Log().Infof("user id=3, count:%v", count)
 }
+
+// ALL: 获取查询结果 Result
+func TestAll(t *testing.T) {
+	// 也可以简写为 select * from user as t where t.id > 0
+	logger := g.Log()
+	result, err := g.DB().Table("user").As("t").All("t.id > ?", 0)
+	if err != nil {
+		logger.Error(err)
+		t.Fail()
+	}
+	for index, value := range result {
+		logger.Infof("index:%v row id:%v name:%v\n", index, value["id"], value["name"])
+	}
+}
