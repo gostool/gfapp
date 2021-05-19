@@ -14,7 +14,6 @@ func TestInsert(t *testing.T) {
 	}
 }
 
-
 // Update
 func TestUpdate(t *testing.T) {
 	// UPDATE `user` SET `name`='john guo' WHERE name='john'
@@ -34,15 +33,15 @@ func TestDelete(t *testing.T) {
 	}
 }
 
-
 // Select Where
 func TestWhere(t *testing.T) {
 	// 数量
-	count, err := g.DB().Table("user").Where("id", 3).Count()
+	//count, err := g.DB().Table("user").Count()
+	count, err := g.DB().Table("user").Where("id", 4).Count()
 	if err != nil {
 		panic(err)
 	}
-	g.Log().Infof("user id=3, count:%v", count)
+	g.Log().Infof("user id=4, count:%v", count)
 }
 
 // ALL: 获取查询结果 Result
