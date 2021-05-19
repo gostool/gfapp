@@ -10,10 +10,14 @@
     Path        = "/tmp/log/gf-app"
     Level       = "all"
     Stdout      = true
-    [logger.debug]
-        path   = "/tmp/log/gf-app/debug"
-        level  = "dev"
-        stdout = true
+[logger.debug]
+    path   = "/tmp/log/gf-app/debug"
+    level  = "dev"
+    stdout = true
+[logger.test]
+path   = "/tmp/log/gf-app/test"
+level  = "info"
+stdout = false
 
 # Template.
 [viewer]
@@ -26,17 +30,17 @@
     link  = "mysql:root:12345678@tcp(127.0.0.1:3306)/test"
     debug = true
     # Database logger.
-    [database.logger]
-        Path   = "/tmp/log/gf-app/sql"
-        Level  = "all"
-        Stdout = true
+[database.logger]
+    Path   = "/tmp/log/gf-app/sql"
+    Level  = "all"
+    Stdout = true
 # gf gen mode/dao
 [gfcli]
-      # 根据配置的test数据库中的user/post表生成dao文件
-      [[gfcli.gen.dao]]
-          link  = "mysql:root:12345678@tcp(127.0.0.1:3306)/test"
-          tables = "user,post"
-      # 根据配置的test数据库中的user/post表生成model文件
-      [[gfcli.gen.model]]
-          link  = "mysql:root:12345678@tcp(127.0.0.1:3306)/test"
-          tables = "user,post"
+# 根据配置的test数据库中的user/post表生成dao文件
+[[gfcli.gen.dao]]
+    link  = "mysql:root:12345678@tcp(127.0.0.1:3306)/test"
+    tables = "user,post"
+# 根据配置的test数据库中的user/post表生成model文件
+[[gfcli.gen.model]]
+    link  = "mysql:root:12345678@tcp(127.0.0.1:3306)/test"
+    tables = "user,post"

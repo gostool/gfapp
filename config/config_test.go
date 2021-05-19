@@ -25,4 +25,5 @@ func TestLogger(t *testing.T) {
 	// 1.默认日志
 	g.Log().Info("i am in logger default")
 	g.Log("debug").Info("i am in logger debug")
+	g.Log("test").Info("i am in logger test")
 }
