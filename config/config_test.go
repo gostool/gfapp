@@ -2,6 +2,7 @@ package config
 
 import (
 	"github.com/gogf/gf/frame/g"
+	"github.com/gogf/gf/test/gtest"
 	"testing"
 )
 // 测试针对: config_tpl.toml 进行测试.
@@ -12,11 +13,10 @@ import (
 
 func TestCfgSetPath(t *testing.T) {
 	g.Cfg().SetFileName("config_tpl.toml")
-	address := g.Config().Get("server.Address")
-	if address.(string) != ":8299" {
-		t.Logf("addr(%v) != :8299 in config_tpl.toml", address)
-		t.Fail()
-	}
+	v := g.Config().GetVar("server.Address")
+	gtest.C(t, func(t *gtest.T) {
+		t.AssertEQ(v.String(), ":8299")
+	})
 }
 
 func TestLogger(t *testing.T) {
