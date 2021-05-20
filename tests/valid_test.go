@@ -78,3 +78,29 @@ func TestValidStruct(t *testing.T) {
 		t.Log("check ok!")
 	}
 }
+
+func TestStruct(t *testing.T) {
+	type Pass struct {
+		Pass1 string `valid:"password1@required|length:6,30|same:password2#请输入您的密码|长度必须在6-30|您两次输入的密码不一致"`
+		Pass2 string `valid:"password2@required|length:6,30|same:password1#请再次输入您的密码|长度必须在6-30|您两次输入的密码不一致"`
+	}
+	type User struct {
+		Id   int    `v:"id      @integer|min:1#|请输入用户ID"`
+		Name  string `v:"name     @required|length:6,30#请输入用户名称|用户名称长度非法"`
+		Pass
+	}
+
+	user := &User{
+		Id: 1,
+		Name:  "john12",
+		Pass: Pass{
+			Pass1: "124@1534",
+			Pass2: "124@15342",
+		},
+	}
+
+	// 使用结构体定义的校验规则和错误提示进行校验
+	if e := gvalid.CheckStruct(user, nil); e != nil {
+		g.Dump(e.Maps())
+	}
+}
