@@ -1,4 +1,4 @@
-package config
+package tests
 
 import (
 	"github.com/gogf/gf/frame/g"
