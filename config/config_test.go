@@ -4,11 +4,11 @@ import (
 	"github.com/gogf/gf/frame/g"
 	"testing"
 )
-
-func TestCfg(t *testing.T) {
-	address := g.Config().Get("server.Address")
-	t.Logf("Address:%v\n", address)
-}
+// 测试针对: config_tpl.toml 进行测试.
+// 项目中真实使用.config.toml.
+// config_tpl.toml 必须实时同步.
+// 更新config_tpl.toml 需要更新本测试文件. git action会进行测试
+// 本地测试: go test -v ./config
 
 func TestCfgSetPath(t *testing.T) {
 	g.Cfg().SetFileName("config_tpl.toml")
