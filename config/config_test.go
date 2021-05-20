@@ -27,3 +27,14 @@ func TestLogger(t *testing.T) {
 	g.Log("debug").Info("i am in logger debug")
 	g.Log("test").Info("i am in logger test")
 }
+
+// add redis conf test
+func TestCfgRedis(t *testing.T) {
+	g.Cfg().SetFileName("config_tpl.toml")
+	v := g.Config().GetVar("redis")
+	redis := v.MapStrStr()
+	gtest.C(t, func(t *gtest.T) {
+		t.AssertEQ(redis["default"], "127.0.0.1:6379,0")
+		t.AssertEQ(redis["cache"], "127.0.0.1:6379,1,123456?idleTimeout=600")
+	})
+}
