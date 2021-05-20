@@ -17,5 +17,6 @@ cbuild
 main
 gf-empty
 .vscode
-go.sum
+#go.sum
 config/config.toml
+gfapp
