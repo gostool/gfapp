@@ -4,6 +4,7 @@ import (
 	"github.com/gogf/gf/frame/g"
 	"testing"
 )
+
 // 测试针对: config_tpl.toml 进行测试.
 // 项目中真实使用.config.toml.
 // config_tpl.toml 必须实时同步.
@@ -26,4 +27,14 @@ func TestLogger(t *testing.T) {
 	g.Log().Info("i am in logger default")
 	g.Log("debug").Info("i am in logger debug")
 	g.Log("test").Info("i am in logger test")
+}
+
+func TestRedis(t *testing.T) {
+	g.Cfg().SetFileName("config_tpl.toml")
+	cfgMp := g.Config().Get("redis")
+	address := cfgMp.(map[string]interface{})["default"]
+	if address.(string) != "127.0.0.1:6379,0" {
+		t.Logf("addr(%v) != 127.0.0.1:6379,0 in config_tpl.toml", address)
+		t.Fail()
+	}
 }
