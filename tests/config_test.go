@@ -1,7 +1,8 @@
-package config
+package tests
 
 import (
 	"github.com/gogf/gf/frame/g"
+	"github.com/gogf/gf/test/gtest"
 	"testing"
 )
 // 测试针对: config_tpl.toml 进行测试.
@@ -12,11 +13,10 @@ import (
 
 func TestCfgSetPath(t *testing.T) {
 	g.Cfg().SetFileName("config_tpl.toml")
-	address := g.Config().Get("server.Address")
-	if address.(string) != ":8299" {
-		t.Logf("addr(%v) != :8299 in config_tpl.toml", address)
-		t.Fail()
-	}
+	v := g.Config().GetVar("server.Address")
+	gtest.C(t, func(t *gtest.T) {
+		t.AssertEQ(v.String(), ":8299")
+	})
 }
 
 func TestLogger(t *testing.T) {
@@ -26,4 +26,15 @@ func TestLogger(t *testing.T) {
 	g.Log().Info("i am in logger default")
 	g.Log("debug").Info("i am in logger debug")
 	g.Log("test").Info("i am in logger test")
+}
+
+// add redis conf test
+func TestCfgRedis(t *testing.T) {
+	g.Cfg().SetFileName("config_tpl.toml")
+	v := g.Config().GetVar("redis")
+	redis := v.MapStrStr()
+	gtest.C(t, func(t *gtest.T) {
+		t.AssertEQ(redis["default"], "127.0.0.1:6379,0")
+		t.AssertEQ(redis["cache"], "127.0.0.1:6379,1,123456?idleTimeout=600")
+	})
 }
