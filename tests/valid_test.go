@@ -1,17 +1,106 @@
 package tests
 
 import (
+	"github.com/gogf/gf/frame/g"
 	"github.com/gogf/gf/test/gtest"
 	"github.com/gogf/gf/util/gvalid"
 	"testing"
 )
 
-func TestCheck(t *testing.T) {
-	rule := "length:6,16"
+func TestValidCheck(t *testing.T) {
 	gtest.C(t, func(t *gtest.T) {
-		m := gvalid.Check("123456", rule, nil)
-		t.AssertNil(m)
-		m2 := gvalid.Check("12356", rule, "长度错误,必须在6-16之间")
-		t.AssertEQ(m2.String(), "长度错误,必须在6-16之间")
+		// 单条数据校验
+		var dataTests = []struct {
+			input string
+			msg string
+			rule string
+		}{
+			{
+				"123456",
+				"长度为6-16",
+				"length:6,16",
+			},
+			{
+				"12346",
+				"长度错误，必须小于16",
+				"length:6,16",
+			},
+			{
+				"12346789101234567",
+				"长度错误，必须小于16",
+				"length:6,16",
+			},
+			// integer 验证
+			{
+				"10",
+				"请输入一个整数|范必须在[18:200]",
+				"integer|between:6,16",
+			},
+			{
+				"a",
+				"请输入一个整数|范围必须在[18:200]",
+				"integer|between:18,200",
+			},
+		}
+		for _, data := range dataTests {
+			m := gvalid.Check(data.input, data.rule, data.msg)
+			if m != nil {
+				t.Log(m.Error())
+				t.AssertEQ(m.String(), data.msg)
+			}
+		}
 	})
+}
+
+// Map数据校验
+func TestValidStruct(t *testing.T) {
+	params := map[string]interface{}{
+		"passport":  "john",
+		"password":  "123456",
+		"password2": "1234567",
+	}
+	rules := map[string]string{
+		"passport":  "required|length:6,16",
+		"password":  "required|length:6,16|same:password2",
+		"password2": "required|length:6,16",
+	}
+	msgs := map[string]interface{}{
+		"passport": "账号不能为空|账号长度应当在:min到:max之间",
+		"password": map[string]string{
+			"required": "密码不能为空",
+			"same":     "两次密码输入不相等",
+		},
+	}
+	if e := gvalid.CheckMap(params, rules, msgs); e != nil {
+		//g.Dump(e.Map())
+		g.Dump(e.Maps())
+	} else {
+		t.Log("check ok!")
+	}
+}
+
+func TestStruct(t *testing.T) {
+	type Pass struct {
+		Pass1 string `valid:"password1@required|length:6,30|same:password2#请输入您的密码|长度必须在6-30|您两次输入的密码不一致"`
+		Pass2 string `valid:"password2@required|length:6,30|same:password1#请再次输入您的密码|长度必须在6-30|您两次输入的密码不一致"`
+	}
+	type User struct {
+		Id   int    `v:"id      @integer|min:1#|请输入用户ID"`
+		Name  string `v:"name     @required|length:6,30#请输入用户名称|用户名称长度非法"`
+		Pass
+	}
+
+	user := &User{
+		Id: 1,
+		Name:  "john12",
+		Pass: Pass{
+			Pass1: "124@1534",
+			Pass2: "124@15342",
+		},
+	}
+
+	// 使用结构体定义的校验规则和错误提示进行校验
+	if e := gvalid.CheckStruct(user, nil); e != nil {
+		g.Dump(e.Maps())
+	}
 }
