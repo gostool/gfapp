@@ -87,6 +87,18 @@ func (s *userService) SignIn(ctx context.Context, passport, password string) err
 	return nil
 }
 
+// 用户登录，成功返回用户信息，否则返回nil; passport应当会md5值字符串
+func (s *userService) SignInWeb(r *model.UserServiceSignInWebReq) (user *model.User, err error) {
+	user, err = dao.User.FindOne("passport=? and password=?", r.Username, r.Password)
+	if err != nil {
+		return nil, err
+	}
+	if user == nil {
+		return nil, errors.New("账号或密码错误")
+	}
+	return user, nil
+}
+
 // 用户注销
 func (s *userService) SignOut(ctx context.Context) error {
 	return Session.RemoveUser(ctx)

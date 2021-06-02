@@ -4,26 +4,7 @@
         "contact": {}
     },
     "paths": {
-        "/api/user/get-profile": {
-            "get": {
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "用户服务"
-                ],
-                "summary": "获取用户详情信息",
-                "responses": {
-                    "200": {
-                        "description": "用户信息",
-                        "schema": {
-                            "$ref": "#/definitions/model.User"
-                        }
-                    }
-                }
-            }
-        },
-        "/base/chat/index": {
+        "/api/chat/index": {
             "get": {
                 "description": "聊天室首页，只显示模板内容。如果当前用户未登录，那么引导跳转到名称设置页面。",
                 "produces": [
@@ -43,7 +24,7 @@
                 }
             }
         },
-        "/base/chat/set-name": {
+        "/api/chat/set-name": {
             "get": {
                 "description": "展示设置聊天名称页面，在该页面设置名称，成功后再跳转到聊天室页面。",
                 "produces": [
@@ -63,7 +44,7 @@
                 }
             }
         },
-        "/base/chat/web-socket": {
+        "/api/chat/web-socket": {
             "post": {
                 "description": "通过WebSocket连接该接口发送任意数据。",
                 "tags": [
@@ -72,7 +53,7 @@
                 "summary": "WebSocket接口"
             }
         },
-        "/base/tools/captcha": {
+        "/api/tools/captcha": {
             "post": {
                 "security": [
                     {
@@ -99,7 +80,34 @@
                 }
             }
         },
-        "/base/user/check-nick-name": {
+        "/api/tools/new-jwt": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "tools"
+                ],
+                "summary": "生成token",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user/check-nick-name": {
             "get": {
                 "produces": [
                     "application/json"
@@ -127,7 +135,7 @@
                 }
             }
         },
-        "/base/user/check-passport": {
+        "/api/user/check-passport": {
             "get": {
                 "produces": [
                     "application/json"
@@ -155,7 +163,26 @@
                 }
             }
         },
-        "/base/user/is-signed-in": {
+        "/api/user/get-profile": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户服务"
+                ],
+                "summary": "获取用户详情信息",
+                "responses": {
+                    "200": {
+                        "description": "用户信息",
+                        "schema": {
+                            "$ref": "#/definitions/model.User"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user/is-signed-in": {
             "get": {
                 "produces": [
                     "application/json"
@@ -174,7 +201,7 @@
                 }
             }
         },
-        "/base/user/register": {
+        "/api/user/register": {
             "post": {
                 "produces": [
                     "application/json"
@@ -204,7 +231,7 @@
                 }
             }
         },
-        "/base/user/sign-in": {
+        "/api/user/sign-in": {
             "post": {
                 "produces": [
                     "application/json"
@@ -212,7 +239,7 @@
                 "tags": [
                     "用户服务"
                 ],
-                "summary": "用户登录接口",
+                "summary": "用户登录接口web",
                 "parameters": [
                     {
                         "type": "string",
@@ -239,7 +266,7 @@
                 }
             }
         },
-        "/base/user/sign-out": {
+        "/api/user/sign-out": {
             "get": {
                 "produces": [
                     "application/json"

@@ -1,9 +1,12 @@
 package service
 
 import (
+	"gfapp/app/model"
 	"gfapp/library/response"
+	"github.com/dgrijalva/jwt-go"
 	"github.com/gogf/gf/frame/g"
 	"github.com/mojocn/base64Captcha"
+	"time"
 )
 
 // 中间件管理服务
@@ -30,4 +33,21 @@ func (b *baseService) Captcha() (result *response.Captcha, err error) {
 	var captcha = base64Captcha.NewCaptcha(driver, Store)
 	info.Id, info.Path, err = captcha.Generate()
 	return &info, err
+}
+
+func (b *baseService) NewJwt(r *model.ClaimServiceReq) (data string, err error) {
+	claims := model.Claim{
+		Id: r.Id,
+		StandardClaims: jwt.StandardClaims{
+			NotBefore: time.Now().Unix(),
+			ExpiresAt: time.Now().Unix() + 60*60*2,
+			Issuer:    "tt",
+		},
+	}
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	data, err = token.SignedString(r.SecSecret())
+	if err != nil {
+		return "", err
+	}
+	return data, nil
 }

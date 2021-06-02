@@ -15,14 +15,12 @@ func init() {
 			service.Middleware.Ctx,
 			service.Middleware.CORS,
 		)
-		group.Group("/base", func(group *ghttp.RouterGroup) {
+		group.Group("/api", func(group *ghttp.RouterGroup) {
 			group.ALLMap(g.Map{
 				"/user":  api.User, // 用户
 				"/chat":  api.Chat,
 				"/tools": api.Tools,
 			})
-		})
-		group.Group("/api", func(group *ghttp.RouterGroup) {
 			group.Middleware(service.Middleware.Auth)
 			group.ALL("/user", api.UserAuth)
 		})

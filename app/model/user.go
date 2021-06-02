@@ -26,6 +26,12 @@ type UserApiSignInReq struct {
 	Password string `v:"required#密码不能为空"`
 }
 
+// 登录请求参数，用于前后端交互参数格式约定
+type UserApiSignInWebReq struct {
+	Username string `v:"required#账号不能为空" json:"username"`
+	Password string `v:"required#密码不能为空" json:"password"`
+}
+
 // 账号唯一性检测请求参数，用于前后端交互参数格式约定
 type UserApiCheckPassportReq struct {
 	Passport string `v:"required#账号不能为空"`
@@ -41,4 +47,9 @@ type UserServiceSignUpReq struct {
 	Passport string
 	Password string
 	Nickname string
+}
+
+type UserServiceSignInWebReq struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
 }

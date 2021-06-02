@@ -1,13 +1,11 @@
 package api
 
 import (
+	"gfapp/app/model"
 	"gfapp/app/service"
 	"gfapp/library/response"
-	"time"
-
 	//"github.com/gogf/gf-jwt"
 	"github.com/dgrijalva/jwt-go"
-	"github.com/gogf/gf/frame/g"
 	"github.com/gogf/gf/net/ghttp"
 )
 
@@ -21,10 +19,10 @@ type toolsApi struct{}
 // @accept application/json
 // @Produce application/json
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"验证码获取成功"}"
-// @Router /base/tools/captcha [post]
+// @Router /api/tools/captcha [post]
 func (t *toolsApi) Captcha(r *ghttp.Request) {
 	result, err := service.Base.Captcha()
-	g.Log().Debugf("result:%v", result)
+	//g.Log().Debugf("result:%v", result)
 	if err != nil {
 		response.JsonExit(r, 1, err.Error())
 	} else {
@@ -32,24 +30,23 @@ func (t *toolsApi) Captcha(r *ghttp.Request) {
 	}
 }
 
+// @Tags tools
+// @Summary 生成token
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Success 200 {string} string response.JsonResponse
+// @Router /api/tools/new-jwt [post]
 func (t *toolsApi) NewJwt(r *ghttp.Request) {
-	mySigningKey := []byte("myBaseJWT")
-	type MyCustomClaims struct {
-		Id string `json:"1"`
-		jwt.StandardClaims
+	serviceReq := model.ClaimServiceReq{
+		Id: "1",
 	}
-	// Create the Claims
-	claims := MyCustomClaims{
-		"1",
-		jwt.StandardClaims{
-			NotBefore: time.Now().Unix(),
-			ExpiresAt: time.Now().Unix() + 60*60*2,
-			Issuer:    "tt",
-		},
+	token, err := service.Base.NewJwt(&serviceReq)
+	if err != nil {
+		response.JsonExit(r, 1, err.Error())
+	} else {
+		response.JsonExit(r, 0, "ok", token)
 	}
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	ss, err := token.SignedString(mySigningKey)
-	r.Response.Writef("%v %v", ss, err)
 }
 
 func (t *toolsApi) ParseJwt(r *ghttp.Request) {

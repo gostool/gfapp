@@ -4,6 +4,7 @@ import (
 	"gfapp/app/model"
 	"gfapp/app/service"
 	"gfapp/library/response"
+	"github.com/gogf/gf/frame/g"
 	"github.com/gogf/gf/net/ghttp"
 	"github.com/gogf/gf/util/gconv"
 )
@@ -20,7 +21,7 @@ type userAuth struct{}
 // @tags    用户服务
 // @produce json
 // @param   entity  body model.UserApiSignUpReq true "注册请求"
-// @router  /base/user/register [POST]
+// @router  /api/user/register [POST]
 // @success 200 {object} response.JsonResponse "执行结果"
 func (a *userApi) Register(r *ghttp.Request) {
 	var (
@@ -45,7 +46,7 @@ func (a *userApi) Register(r *ghttp.Request) {
 // @produce json
 // @param   passport formData string true "用户账号"
 // @param   password formData string true "用户密码"
-// @router  /base/user/sign-in [POST]
+// @router  /api/user/sign-in [POST]
 // @success 200 {object} response.JsonResponse "执行结果"
 func (a *userApi) SignIn(r *ghttp.Request) {
 	var (
@@ -61,10 +62,45 @@ func (a *userApi) SignIn(r *ghttp.Request) {
 	}
 }
 
+// @summary 用户登录接口web
+// @tags    用户服务
+// @produce json
+// @param   passport formData string true "用户账号"
+// @param   password formData string true "用户密码"
+// @router  /api/user/sign-in [POST]
+// @success 200 {object} response.JsonResponse "执行结果"
+func (a *userApi) SignInWeb(r *ghttp.Request) {
+	var (
+		apiReq     *model.UserApiSignInWebReq
+		serviceReq *model.UserServiceSignInWebReq
+	)
+	if err := r.ParseForm(&apiReq); err != nil {
+		response.JsonExit(r, 1, err.Error())
+	}
+	if err := gconv.Struct(apiReq, &serviceReq); err != nil {
+		response.JsonExit(r, 1, err.Error())
+	}
+	user, err := service.User.SignInWeb(serviceReq)
+	if err != nil {
+		response.JsonExit(r, 1, err.Error())
+	}
+	token, err := service.Base.NewJwt(&model.ClaimServiceReq{
+		Id:   gconv.String(user.Id),
+		Salt: "",
+	})
+	if err != nil {
+		response.JsonExit(r, 1, err.Error())
+	}
+	response.JsonExit(r, 0, "ok", g.Map{
+		"Id":    user.Id,
+		"token": token,
+	})
+}
+
 // @summary 判断用户是否已经登录
 // @tags    用户服务
 // @produce json
-// @router  /base/user/is-signed-in [GET]
+// @router  /api/user/is-signed-in [GET]
 // @success 200 {object} response.JsonResponse "执行结果:`true/false`"
 func (a *userApi) IsSignedIn(r *ghttp.Request) {
 	response.JsonExit(r, 0, "", service.User.IsSignedIn(r.Context()))
@@ -73,7 +109,7 @@ func (a *userApi) IsSignedIn(r *ghttp.Request) {
 // @summary 用户注销/退出接口
 // @tags    用户服务
 // @produce json
-// @router  /base/user/sign-out [GET]
+// @router  /api/user/sign-out [GET]
 // @success 200 {object} response.JsonResponse "执行结果, 1: 未登录"
 func (a *userApi) SignOut(r *ghttp.Request) {
 	if err := service.User.SignOut(r.Context()); err != nil {
@@ -86,7 +122,7 @@ func (a *userApi) SignOut(r *ghttp.Request) {
 // @tags    用户服务
 // @produce json
 // @param   passport query string true "用户账号"
-// @router  /base/user/check-passport [GET]
+// @router  /api/user/check-passport [GET]
 // @success 200 {object} response.JsonResponse "执行结果:`true/false`"
 func (a *userApi) CheckPassport(r *ghttp.Request) {
 	var (
@@ -105,7 +141,7 @@ func (a *userApi) CheckPassport(r *ghttp.Request) {
 // @tags    用户服务
 // @produce json
 // @param   nickname query string true "用户昵称"
-// @router  /base/user/check-nick-name [GET]
+// @router  /api/user/check-nick-name [GET]
 // @success 200 {object} response.JsonResponse "执行结果"
 func (a *userApi) CheckNickName(r *ghttp.Request) {
 	var (

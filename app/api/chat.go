@@ -37,7 +37,7 @@ var (
 // @description 聊天室首页，只显示模板内容。如果当前用户未登录，那么引导跳转到名称设置页面。
 // @tags    聊天室
 // @produce html
-// @router  /base/chat/index [GET]
+// @router  /api/chat/index [GET]
 // @success 200 {string} string "执行结果"
 func (a *chatApi) Index(r *ghttp.Request) {
 	view := r.GetView()
@@ -53,7 +53,7 @@ func (a *chatApi) Index(r *ghttp.Request) {
 // @description 展示设置聊天名称页面，在该页面设置名称，成功后再跳转到聊天室页面。
 // @tags    聊天室
 // @produce html
-// @router  /base/chat/set-name [GET]
+// @router  /api/chat/set-name [GET]
 // @success 200 {string} string "执行成功后跳转到聊天室页面"
 func (a *chatApi) SetName(r *ghttp.Request) {
 	var (
@@ -71,14 +71,14 @@ func (a *chatApi) SetName(r *ghttp.Request) {
 	} else {
 		r.Session.Set("chat_name", name)
 		r.Session.Remove("chat_name_temp", "chat_name_error")
-		r.Response.RedirectTo("/base/chat")
+		r.Response.RedirectTo("/api/chat")
 	}
 }
 
 // @summary WebSocket接口
 // @description 通过WebSocket连接该接口发送任意数据。
 // @tags    聊天室
-// @router  /base/chat/web-socket [POST]
+// @router  /api/chat/web-socket [POST]
 func (a *chatApi) WebSocket(r *ghttp.Request) {
 	msg := &model.ChatMsg{}
 

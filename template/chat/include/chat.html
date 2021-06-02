@@ -75,7 +75,7 @@
             }));
         }
 
-        var url = "ws://" + window.location.origin.replace("http://", "") + "/base/chat/web-socket";
+        var url = "ws://" + window.location.origin.replace("http://", "") + "/api/chat/web-socket";
         var ws  = new WebSocket(url);
         try {
             // ws连接成功
