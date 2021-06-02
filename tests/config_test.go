@@ -5,6 +5,7 @@ import (
 	"github.com/gogf/gf/test/gtest"
 	"testing"
 )
+
 // 测试针对: config_tpl.toml 进行测试.
 // 项目中真实使用.config.toml.
 // config_tpl.toml 必须实时同步.
@@ -36,5 +37,18 @@ func TestCfgRedis(t *testing.T) {
 	gtest.C(t, func(t *gtest.T) {
 		t.AssertEQ(redis["default"], "127.0.0.1:6379,0")
 		t.AssertEQ(redis["cache"], "127.0.0.1:6379,1,123456?idleTimeout=600")
+	})
+}
+
+// add captcha conf test
+func TestCfgCaptcha(t *testing.T) {
+	g.Cfg().SetFileName("config_tpl.toml")
+	v := g.Config().GetVar("captcha")
+	captcha := v.MapStrVar()
+	gtest.C(t, func(t *gtest.T) {
+		t.AssertEQ(captcha["key-long"].Int(), 6)
+		t.AssertEQ(captcha["image-width"].Int(), 240)
+		t.AssertEQ(captcha["image-height"].Int(), 80)
+		t.AssertEQ(captcha["captcha-in-redis"].Bool(), false)
 	})
 }

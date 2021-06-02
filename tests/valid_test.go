@@ -7,13 +7,13 @@ import (
 	"testing"
 )
 
-func TestValidCheck(t *testing.T) {
+func TestValidCheckStr(t *testing.T) {
 	gtest.C(t, func(t *gtest.T) {
 		// 单条数据校验
 		var dataTests = []struct {
 			input string
-			msg string
-			rule string
+			msg   string
+			rule  string
 		}{
 			{
 				"123456",
@@ -21,23 +21,42 @@ func TestValidCheck(t *testing.T) {
 				"length:6,16",
 			},
 			{
-				"12346",
+				"123456",
 				"长度错误，必须小于16",
 				"length:6,16",
 			},
 			{
-				"12346789101234567",
+				"123456",
 				"长度错误，必须小于16",
 				"length:6,16",
 			},
+		}
+		for _, data := range dataTests {
+			m := gvalid.Check(data.input, data.rule, data.msg)
+			if m != nil {
+				t.Log(m.Error())
+				t.AssertEQ(m.String(), data.msg)
+			}
+		}
+	})
+}
+
+func TestCheckValidInt(t *testing.T) {
+	gtest.C(t, func(t *gtest.T) {
+		// 单条数据校验
+		var dataTests = []struct {
+			input int
+			msg   string
+			rule  string
+		}{
 			// integer 验证
 			{
-				"10",
+				15,
 				"请输入一个整数|范必须在[18:200]",
 				"integer|between:6,16",
 			},
 			{
-				"a",
+				18,
 				"请输入一个整数|范围必须在[18:200]",
 				"integer|between:18,200",
 			},
@@ -55,9 +74,9 @@ func TestValidCheck(t *testing.T) {
 // Map数据校验
 func TestValidStruct(t *testing.T) {
 	params := map[string]interface{}{
-		"passport":  "john",
+		"passport":  "johnHello",
 		"password":  "123456",
-		"password2": "1234567",
+		"password2": "123456",
 	}
 	rules := map[string]string{
 		"passport":  "required|length:6,16",
@@ -86,16 +105,16 @@ func TestStruct(t *testing.T) {
 	}
 	type User struct {
 		Id   int    `v:"id      @integer|min:1#|请输入用户ID"`
-		Name  string `v:"name     @required|length:6,30#请输入用户名称|用户名称长度非法"`
+		Name string `v:"name     @required|length:6,30#请输入用户名称|用户名称长度非法"`
 		Pass
 	}
 
 	user := &User{
-		Id: 1,
-		Name:  "john12",
+		Id:   1,
+		Name: "john12",
 		Pass: Pass{
 			Pass1: "124@1534",
-			Pass2: "124@15342",
+			Pass2: "124@1534",
 		},
 	}
 

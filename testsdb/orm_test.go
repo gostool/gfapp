@@ -5,10 +5,20 @@ import (
 	"testing"
 )
 
+// Delete
+func TestDelete(t *testing.T) {
+	// DELETE FROM `user` WHERE uid=10
+	_, err := g.DB().Table("user").Where("id", 4).Delete()
+	if err != nil {
+		panic(err)
+	}
+}
+
 // Insert
 func TestInsert(t *testing.T) {
-	// INSERT INTO `user`(`name`) VALUES('john')
-	_, err := g.DB().Table("user").Data(g.Map{"id": 4, "name": "john"}).Insert()
+	// INSERT INTO `user`(`passport`) VALUES('john')
+	_, err := g.DB().Table("user").
+		Data(g.Map{"id": 4, "passport": "john", "password": "john", "nickname": "littleJohn"}).Insert()
 	if err != nil {
 		panic(err)
 	}
@@ -16,18 +26,9 @@ func TestInsert(t *testing.T) {
 
 // Update
 func TestUpdate(t *testing.T) {
-	// UPDATE `user` SET `name`='john guo' WHERE name='john'
-	_, err := g.DB().Table("user").Data("name", "john guo").
-		Where("name", "john").Update()
-	if err != nil {
-		panic(err)
-	}
-}
-
-// Delete
-func TestDelete(t *testing.T) {
-	// DELETE FROM `user` WHERE uid=10
-	_, err := g.DB().Table("user").Where("id", 4).Delete()
+	// UPDATE `user` SET `passport`='john guo' WHERE passport='john'
+	_, err := g.DB().Table("user").Data("passport", "john guo").
+		Where("passport", "john").Update()
 	if err != nil {
 		panic(err)
 	}
@@ -54,6 +55,6 @@ func TestAll(t *testing.T) {
 		t.Fail()
 	}
 	for index, value := range result {
-		logger.Infof("index:%v row id:%v name:%v\n", index, value["id"], value["name"])
+		logger.Infof("index:%v row id:%v passport:%v\n", index, value["id"], value["passport"])
 	}
 }

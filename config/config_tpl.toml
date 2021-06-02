@@ -49,3 +49,10 @@ stdout = false
 [redis]
     default = "127.0.0.1:6379,0"
     cache   = "127.0.0.1:6379,1,123456?idleTimeout=600"
+
+# captcha configuration
+[captcha]
+key-long = 6
+image-width = 240
+image-height = 80
+captcha-in-redis = false
