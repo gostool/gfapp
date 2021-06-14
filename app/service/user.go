@@ -14,11 +14,7 @@ var User = userService{}
 type userService struct{}
 
 // 用户注册
-func (s *userService) Register(r *model.UserServiceSignUpReq) error {
-	// 昵称为非必需参数，默认使用账号名称
-	if r.Nickname == "" {
-		r.Nickname = r.Passport
-	}
+func (s *userService) Register(r *model.UserRegisterServiceSignUpReq) error {
 	//// 账号唯一性数据检查
 	//if !s.CheckPassport(r.Passport) {
 	//	return errors.New(fmt.Sprintf("账号 %s 已经存在", r.Passport))
@@ -27,16 +23,7 @@ func (s *userService) Register(r *model.UserServiceSignUpReq) error {
 	//if !s.CheckNickName(r.Nickname) {
 	//	return errors.New(fmt.Sprintf("昵称 %s 已经存在", r.Nickname))
 	//}
-	if _, err := dao.User.Insert(g.Map{"passport": r.Passport, "password": r.Password, "nickname": r.Nickname}); err != nil {
-		return err
-	}
-	return nil
-}
-
-// 用户注册Mail
-func (s *userService) RegisterMail(r *model.UserServiceSignUpMailReq) error {
-	//// 账号唯一性数据检查
-	if _, err := dao.UserMail.Insert(g.Map{"email": r.Email, "password": r.Password}); err != nil {
+	if _, err := dao.User.Insert(r.ToMap()); err != nil {
 		return err
 	}
 	return nil
@@ -61,7 +48,7 @@ func (s *userService) CheckNickName(nickname string) bool {
 }
 
 // 用户注册 db.Table("user").Delete("uid", 10)
-func (s *userService) Delete(r *model.UserServiceSignUpReq) error {
+func (s *userService) Delete(r *model.UserRegisterServiceSignUpReq) error {
 	if _, err := dao.User.Delete(g.Map{"passport": r.Passport}); err != nil {
 		return err
 	}
@@ -104,7 +91,7 @@ func (s *userService) SignIn(ctx context.Context, passport, password string) err
 	Context.SetUser(ctx, &model.ContextUser{
 		Id:       user.Id,
 		Passport: user.Passport,
-		Nickname: user.Nickname,
+		Name:     user.Name,
 	})
 	return nil
 }

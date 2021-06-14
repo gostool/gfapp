@@ -6,6 +6,7 @@ package model
 
 import (
 	"gfapp/app/model/internal"
+	"github.com/gogf/gf/frame/g"
 )
 
 // User is the golang structure for table user.
@@ -13,15 +14,16 @@ type User internal.User
 
 // Fill with you ideas below.
 // 注册请求参数，用于前后端交互参数格式约定
-type UserApiSignUpReq struct {
+type UserRegisterApiSignUpReq struct {
 	Passport  string `v:"required|length:6,16#账号不能为空|账号长度应当在:min到:max之间"`
 	Password  string `v:"required|length:6,16#请输入确认密码|密码长度应当在:min到:max之间"`
 	Password2 string `v:"required|length:6,16|same:Password#密码不能为空|密码长度应当在:min到:max之间|两次密码输入不相等"`
-	Nickname  string
+	CaptchaReq
+	registerType int `v:"required|integer|between:6,16" json:"type"`
 }
 
 // 注册请求参数，用于前后端交互参数格式约定
-type UserApiSignUpMailReq struct {
+type UserRegisterApiSignUpMailReq struct {
 	Email     string `v:"required|email"`
 	Password  string `v:"required|length:6,16#请输入确认密码|密码长度应当在:min到:max之间"`
 	Password2 string `v:"required|length:6,16|same:Password#密码不能为空|密码长度应当在:min到:max之间|两次密码输入不相等"`
@@ -50,10 +52,20 @@ type UserApiCheckNickNameReq struct {
 }
 
 // 注册输入参数
-type UserServiceSignUpReq struct {
-	Passport string
-	Password string
-	Nickname string
+type UserRegisterServiceSignUpReq struct {
+	Passport     string
+	Password     string
+	RegisterType int `json:"type"`
+}
+
+func (r *UserRegisterServiceSignUpReq) ToMap() (data *g.Map) {
+	data = &g.Map{
+		"passport":   r.Passport,
+		"password":   r.Password,
+		"type":       r.RegisterType,
+		"is_deleted": 0,
+	}
+	return
 }
 
 // 注册输入参数

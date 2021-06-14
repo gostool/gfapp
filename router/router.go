@@ -10,16 +10,16 @@ import (
 func init() {
 	s := g.Server()
 	s.Group("/", func(group *ghttp.RouterGroup) {
-		group.ALL("/hello", api.Hello)
 		group.Middleware(
 			service.Middleware.Ctx,
 			service.Middleware.CORS,
 		)
 		group.Group("/api", func(group *ghttp.RouterGroup) {
 			group.ALLMap(g.Map{
-				"/user":  api.User, // 用户
-				"/chat":  api.Chat,
-				"/tools": api.Tools,
+				"/user/register": api.UserRegister,
+				"/chat":          api.Chat,
+				"/tools":         api.Tools,
+				"/user":          api.User,
 			})
 			group.Middleware(service.Middleware.Auth)
 			group.ALL("/user", api.UserAuth)

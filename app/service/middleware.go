@@ -22,7 +22,7 @@ func (s *middlewareService) Ctx(r *ghttp.Request) {
 		customCtx.User = &model.ContextUser{
 			Id:       user.Id,
 			Passport: user.Passport,
-			Nickname: user.Nickname,
+			Name:     user.Name,
 		}
 	}
 	// 执行下一步请求逻辑

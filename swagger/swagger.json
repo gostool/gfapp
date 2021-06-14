@@ -107,139 +107,7 @@
                 }
             }
         },
-        "/api/user/check-nick-name": {
-            "get": {
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "用户服务"
-                ],
-                "summary": "检测用户昵称接口(唯一性校验)",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "用户昵称",
-                        "name": "nickname",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "执行结果",
-                        "schema": {
-                            "$ref": "#/definitions/response.JsonResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/user/check-passport": {
-            "get": {
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "用户服务"
-                ],
-                "summary": "检测用户账号接口(唯一性校验)",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "用户账号",
-                        "name": "passport",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "执行结果:`true/false`",
-                        "schema": {
-                            "$ref": "#/definitions/response.JsonResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/user/get-profile": {
-            "get": {
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "用户服务"
-                ],
-                "summary": "获取用户详情信息",
-                "responses": {
-                    "200": {
-                        "description": "用户信息",
-                        "schema": {
-                            "$ref": "#/definitions/model.User"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/user/get-profile-web": {
-            "get": {
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "用户服务"
-                ],
-                "summary": "获取用户详情信Context.Get(ctx)息",
-                "responses": {
-                    "200": {
-                        "description": "用户信息",
-                        "schema": {
-                            "$ref": "#/definitions/model.User"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/user/is-signed-in": {
-            "get": {
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "用户服务"
-                ],
-                "summary": "判断用户是否已经登录",
-                "responses": {
-                    "200": {
-                        "description": "执行结果:`true/false`",
-                        "schema": {
-                            "$ref": "#/definitions/response.JsonResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/user/is-signed-in-web": {
-            "get": {
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "用户服务"
-                ],
-                "summary": "判断用户是否已经登录",
-                "responses": {
-                    "200": {
-                        "description": "执行结果:`true/false`",
-                        "schema": {
-                            "$ref": "#/definitions/response.JsonResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/user/register": {
+        "/api/user/register/account": {
             "post": {
                 "produces": [
                     "application/json"
@@ -255,37 +123,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.UserApiSignUpReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "执行结果",
-                        "schema": {
-                            "$ref": "#/definitions/response.JsonResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/user/register-mail": {
-            "post": {
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "用户服务"
-                ],
-                "summary": "用户注册接口mail",
-                "parameters": [
-                    {
-                        "description": "注册请求",
-                        "name": "entity",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.UserApiSignUpMailReq"
+                            "$ref": "#/definitions/model.UserRegisterApiSignUpReq"
                         }
                     }
                 ],
@@ -355,53 +193,13 @@
         }
     },
     "definitions": {
-        "model.User": {
+        "model.UserRegisterApiSignUpReq": {
             "type": "object",
             "properties": {
-                "createAt": {
-                    "description": "创建时间",
+                "captcha": {
                     "type": "string"
                 },
-                "id": {
-                    "description": "用户ID",
-                    "type": "integer"
-                },
-                "nickname": {
-                    "description": "用户昵称",
-                    "type": "string"
-                },
-                "passport": {
-                    "description": "用户账号",
-                    "type": "string"
-                },
-                "password": {
-                    "description": "用户密码",
-                    "type": "string"
-                },
-                "updateAt": {
-                    "description": "更新时间",
-                    "type": "string"
-                }
-            }
-        },
-        "model.UserApiSignUpMailReq": {
-            "type": "object",
-            "properties": {
-                "email": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string"
-                },
-                "password2": {
-                    "type": "string"
-                }
-            }
-        },
-        "model.UserApiSignUpReq": {
-            "type": "object",
-            "properties": {
-                "nickname": {
+                "captchaId": {
                     "type": "string"
                 },
                 "passport": {

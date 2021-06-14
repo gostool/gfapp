@@ -6,13 +6,13 @@ import (
 	"testing"
 )
 
-var testUserServiceReq model.UserServiceSignUpReq
+var testUserServiceReq model.UserRegisterServiceSignUpReq
 
 func init() {
-	testUserServiceReq = model.UserServiceSignUpReq{
-		Password: "app01",
-		Passport: "app02",
-		Nickname: "app02",
+	testUserServiceReq = model.UserRegisterServiceSignUpReq{
+		Password:     "123456",
+		Passport:     "admin123",
+		RegisterType: 1,
 	}
 }
 
