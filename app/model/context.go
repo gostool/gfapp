@@ -17,6 +17,7 @@ const (
 type Context struct {
 	Session *ghttp.Session // 当前Session管理对象
 	User    *ContextUser   // 上下文用户信息
+	UserWeb *User
 }
 
 // 请求上下文中的用户信息

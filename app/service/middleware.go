@@ -43,3 +43,12 @@ func (s *middlewareService) Auth(r *ghttp.Request) {
 		r.Response.WriteStatus(http.StatusForbidden)
 	}
 }
+
+// 鉴权中间件，只有登录成功之后才能通过
+func (s *middlewareService) AuthWeb(r *ghttp.Request) {
+	if User.IsSignedInWeb(r.Header.Get("Token"), r.Header.Get("Id"), r.Header.Get("Salt")) {
+		r.Middleware.Next()
+	} else {
+		r.Response.WriteStatus(http.StatusForbidden)
+	}
+}

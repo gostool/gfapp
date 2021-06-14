@@ -51,3 +51,14 @@ func (b *baseService) NewJwt(r *model.ClaimServiceReq) (data string, err error) 
 	}
 	return data, nil
 }
+
+func (b *baseService) ParseJwt(r *model.ClaimServiceReq, tokenString string) (claim *model.Claim, err error) {
+	token, err := jwt.ParseWithClaims(tokenString, &model.Claim{}, func(token *jwt.Token) (interface{}, error) {
+		return r.SecSecret(), nil
+	})
+
+	if claim, ok := token.Claims.(*model.Claim); ok && token.Valid {
+		return claim, nil
+	}
+	return nil, err
+}

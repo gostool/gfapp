@@ -30,6 +30,11 @@ func TestValidCheckStr(t *testing.T) {
 				"长度错误，必须小于16",
 				"length:6,16",
 			},
+			{
+				"23@163.com",
+				"email格式错误",
+				"email",
+			},
 		}
 		for _, data := range dataTests {
 			m := gvalid.Check(data.input, data.rule, data.msg)

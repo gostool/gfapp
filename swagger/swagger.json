@@ -182,7 +182,45 @@
                 }
             }
         },
+        "/api/user/get-profile-web": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户服务"
+                ],
+                "summary": "获取用户详情信Context.Get(ctx)息",
+                "responses": {
+                    "200": {
+                        "description": "用户信息",
+                        "schema": {
+                            "$ref": "#/definitions/model.User"
+                        }
+                    }
+                }
+            }
+        },
         "/api/user/is-signed-in": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户服务"
+                ],
+                "summary": "判断用户是否已经登录",
+                "responses": {
+                    "200": {
+                        "description": "执行结果:`true/false`",
+                        "schema": {
+                            "$ref": "#/definitions/response.JsonResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user/is-signed-in-web": {
             "get": {
                 "produces": [
                     "application/json"
@@ -218,6 +256,36 @@
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/model.UserApiSignUpReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "执行结果",
+                        "schema": {
+                            "$ref": "#/definitions/response.JsonResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user/register-mail": {
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户服务"
+                ],
+                "summary": "用户注册接口mail",
+                "parameters": [
+                    {
+                        "description": "注册请求",
+                        "name": "entity",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UserApiSignUpMailReq"
                         }
                     }
                 ],
@@ -312,6 +380,20 @@
                 },
                 "updateAt": {
                     "description": "更新时间",
+                    "type": "string"
+                }
+            }
+        },
+        "model.UserApiSignUpMailReq": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "password2": {
                     "type": "string"
                 }
             }

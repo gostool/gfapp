@@ -4,8 +4,7 @@ import (
 	"gfapp/app/model"
 	"gfapp/app/service"
 	"gfapp/library/response"
-	//"github.com/gogf/gf-jwt"
-	"github.com/dgrijalva/jwt-go"
+
 	"github.com/gogf/gf/net/ghttp"
 )
 
@@ -50,19 +49,14 @@ func (t *toolsApi) NewJwt(r *ghttp.Request) {
 }
 
 func (t *toolsApi) ParseJwt(r *ghttp.Request) {
-	type MyCustomClaims struct {
-		Id string `json:"1"`
-		jwt.StandardClaims
+	serviceReq := model.ClaimServiceReq{
+		Id:   "1",
+		Salt: "",
 	}
-	tokenString := r.Header.Get("xToken")
-	// sample token is expired.  override time so it parses as valid
-	token, err := jwt.ParseWithClaims(tokenString, &MyCustomClaims{}, func(token *jwt.Token) (interface{}, error) {
-		return []byte("myBaseJWT"), nil
-	})
-
-	if claims, ok := token.Claims.(*MyCustomClaims); ok && token.Valid {
-		r.Response.Writef("%v %v", claims.Id, claims.StandardClaims.ExpiresAt)
-	} else {
-		r.Response.Writeln(err)
+	tokenString := r.Header.Get("Token")
+	claim, err := service.Base.ParseJwt(&serviceReq, tokenString)
+	if err != nil {
+		response.JsonExit(r, 1, err.Error())
 	}
+	response.JsonExit(r, 0, "ok", claim.Id, claim.StandardClaims.ExpiresAt)
 }

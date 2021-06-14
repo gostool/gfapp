@@ -33,6 +33,15 @@ func (s *userService) Register(r *model.UserServiceSignUpReq) error {
 	return nil
 }
 
+// 用户注册Mail
+func (s *userService) RegisterMail(r *model.UserServiceSignUpMailReq) error {
+	//// 账号唯一性数据检查
+	if _, err := dao.UserMail.Insert(g.Map{"email": r.Email, "password": r.Password}); err != nil {
+		return err
+	}
+	return nil
+}
+
 // 检查账号是否符合规范(目前仅检查唯一性),存在返回false,否则true
 func (s *userService) CheckPassport(passport string) bool {
 	if i, err := dao.User.FindCount("passport", passport); err != nil {
@@ -67,6 +76,19 @@ func (s *userService) IsSignedIn(ctx context.Context) bool {
 	return false
 }
 
+// 判断用户是否已经登录
+func (s *userService) IsSignedInWeb(token string, id string, salt string) bool {
+	serviceReq := model.ClaimServiceReq{
+		Id:   id,
+		Salt: salt,
+	}
+	_, err := Base.ParseJwt(&serviceReq, token)
+	if err != nil {
+		return false
+	}
+	return true
+}
+
 // 用户登录，成功返回用户信息，否则返回nil; passport应当会md5值字符串
 func (s *userService) SignIn(ctx context.Context, passport, password string) error {
 	user, err := dao.User.FindOne("passport=? and password=?", passport, password)
@@ -88,7 +110,7 @@ func (s *userService) SignIn(ctx context.Context, passport, password string) err
 }
 
 // 用户登录，成功返回用户信息，否则返回nil; passport应当会md5值字符串
-func (s *userService) SignInWeb(r *model.UserServiceSignInWebReq) (user *model.User, err error) {
+func (s *userService) SignInWeb(ctx context.Context, r *model.UserServiceSignInWebReq) (user *model.User, err error) {
 	user, err = dao.User.FindOne("passport=? and password=?", r.Username, r.Password)
 	if err != nil {
 		return nil, err
@@ -96,6 +118,7 @@ func (s *userService) SignInWeb(r *model.UserServiceSignInWebReq) (user *model.U
 	if user == nil {
 		return nil, errors.New("账号或密码错误")
 	}
+	Context.SetUserWeb(ctx, user)
 	return user, nil
 }
 
@@ -107,4 +130,9 @@ func (s *userService) SignOut(ctx context.Context) error {
 // 获得用户信息详情
 func (s *userService) GetProfile(ctx context.Context) *model.User {
 	return Session.GetUser(ctx)
+}
+
+// 获得用户信息详情
+func (s *userService) GetProfileWeb(ctx context.Context) *model.User {
+	return Context.Get(ctx).UserWeb
 }

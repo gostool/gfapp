@@ -24,6 +24,10 @@ func init() {
 			group.Middleware(service.Middleware.Auth)
 			group.ALL("/user", api.UserAuth)
 		})
+		group.Group("/api", func(group *ghttp.RouterGroup) {
+			group.Middleware(service.Middleware.AuthWeb)
+			group.ALL("/userWeb", api.UserAuthWeb)
+		})
 	})
 }
 

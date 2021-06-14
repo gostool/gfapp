@@ -32,3 +32,7 @@ func (s *contextService) Get(ctx context.Context) *model.Context {
 func (s *contextService) SetUser(ctx context.Context, ctxUser *model.ContextUser) {
 	s.Get(ctx).User = ctxUser
 }
+
+func (s *contextService) SetUserWeb(ctx context.Context, user *model.User) {
+	s.Get(ctx).UserWeb = user
+}
