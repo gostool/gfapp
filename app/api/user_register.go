@@ -27,6 +27,9 @@ func (a *userRegisterApi) Account(r *ghttp.Request) {
 	if err := r.ParseForm(&apiReq); err != nil {
 		response.JsonExit(r, 1, err.Error())
 	}
+	if !service.Base.Verify(apiReq.CaptchaId, apiReq.Captcha, true) {
+		response.JsonExit(r, 1, service.StoreError.Error())
+	}
 	if err := gconv.Struct(apiReq, &serviceReq); err != nil {
 		response.JsonExit(r, 1, err.Error())
 	}
