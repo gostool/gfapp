@@ -19,14 +19,25 @@ type UserRegisterApiSignUpReq struct {
 	Password  string `v:"required|length:6,16#请输入确认密码|密码长度应当在:min到:max之间"`
 	Password2 string `v:"required|length:6,16|same:Password#密码不能为空|密码长度应当在:min到:max之间|两次密码输入不相等"`
 	CaptchaReq
-	registerType int `v:"required|integer|between:6,16" json:"type"`
+	RegisterType int `v:"required|integer|between:1,3" json:"type"`
 }
 
 // 注册请求参数，用于前后端交互参数格式约定
-type UserRegisterApiSignUpMailReq struct {
+type UserRegisterApiMailSignUpReq struct {
 	Email     string `v:"required|email"`
 	Password  string `v:"required|length:6,16#请输入确认密码|密码长度应当在:min到:max之间"`
 	Password2 string `v:"required|length:6,16|same:Password#密码不能为空|密码长度应当在:min到:max之间|两次密码输入不相等"`
+	CaptchaReq
+	RegisterType int `v:"required|integer|between:1,3" json:"type"`
+}
+
+// 注册请求参数，用于前后端交互参数格式约定
+type UserRegisterApiPhoneSignUpReq struct {
+	Phone     string `v:"required|phone"`
+	Password  string `v:"required|length:6,16#请输入确认密码|密码长度应当在:min到:max之间"`
+	Password2 string `v:"required|length:6,16|same:Password#密码不能为空|密码长度应当在:min到:max之间|两次密码输入不相等"`
+	CaptchaReq
+	RegisterType int `v:"required|integer|between:1,3" json:"type"`
 }
 
 // 登录请求参数，用于前后端交互参数格式约定
@@ -41,37 +52,41 @@ type UserApiSignInWebReq struct {
 	Password string `v:"required#密码不能为空" json:"password"`
 }
 
-// 账号唯一性检测请求参数，用于前后端交互参数格式约定
-type UserApiCheckPassportReq struct {
-	Passport string `v:"required#账号不能为空"`
-}
-
-// 昵称唯一性检测请求参数，用于前后端交互参数格式约定
-type UserApiCheckNickNameReq struct {
-	Nickname string `v:"required#昵称不能为空"`
-}
-
 // 注册输入参数
 type UserRegisterServiceSignUpReq struct {
 	Passport     string
 	Password     string
+	Email        string
+	Phone        string
 	RegisterType int `json:"type"`
 }
 
 func (r *UserRegisterServiceSignUpReq) ToMap() (data *g.Map) {
-	data = &g.Map{
-		"passport":   r.Passport,
-		"password":   r.Password,
-		"type":       r.RegisterType,
-		"is_deleted": 0,
+	if r.RegisterType == 1 { //account
+		data = &g.Map{
+			"passport":   r.Passport,
+			"password":   r.Password,
+			"type":       r.RegisterType,
+			"is_deleted": 0,
+		}
+	} else if r.RegisterType == 2 { //email
+		data = &g.Map{
+			"passport":   r.Email,
+			"password":   r.Password,
+			"type:":      r.RegisterType,
+			"email":      r.Email,
+			"is_deleted": 0,
+		}
+	} else { //phone
+		data = &g.Map{
+			"passport":   r.Phone,
+			"password":   r.Password,
+			"type":       r.RegisterType,
+			"phone":      r.Phone,
+			"is_deleted": 0,
+		}
 	}
 	return
-}
-
-// 注册输入参数
-type UserServiceSignUpMailReq struct {
-	Email    string
-	Password string
 }
 
 type UserServiceSignInWebReq struct {

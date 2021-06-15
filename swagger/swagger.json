@@ -137,6 +137,66 @@
                 }
             }
         },
+        "/api/user/register/email": {
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户服务"
+                ],
+                "summary": "用户Email注册接口",
+                "parameters": [
+                    {
+                        "description": "注册请求",
+                        "name": "entity",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UserRegisterApiMailSignUpReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "执行结果",
+                        "schema": {
+                            "$ref": "#/definitions/response.JsonResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user/register/phone": {
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户服务"
+                ],
+                "summary": "用户Phone注册接口",
+                "parameters": [
+                    {
+                        "description": "注册请求",
+                        "name": "entity",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UserRegisterApiPhoneSignUpReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "执行结果",
+                        "schema": {
+                            "$ref": "#/definitions/response.JsonResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/api/user/sign-in": {
             "post": {
                 "produces": [
@@ -193,6 +253,52 @@
         }
     },
     "definitions": {
+        "model.UserRegisterApiMailSignUpReq": {
+            "type": "object",
+            "properties": {
+                "captcha": {
+                    "type": "string"
+                },
+                "captchaId": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "password2": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "integer"
+                }
+            }
+        },
+        "model.UserRegisterApiPhoneSignUpReq": {
+            "type": "object",
+            "properties": {
+                "captcha": {
+                    "type": "string"
+                },
+                "captchaId": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "password2": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "integer"
+                }
+            }
+        },
         "model.UserRegisterApiSignUpReq": {
             "type": "object",
             "properties": {
@@ -210,6 +316,9 @@
                 },
                 "password2": {
                     "type": "string"
+                },
+                "type": {
+                    "type": "integer"
                 }
             }
         },

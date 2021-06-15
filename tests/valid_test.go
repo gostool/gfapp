@@ -57,7 +57,7 @@ func TestCheckValidInt(t *testing.T) {
 			// integer 验证
 			{
 				15,
-				"请输入一个整数|范必须在[18:200]",
+				"请输入一个整数|范必须在[6:16]",
 				"integer|between:6,16",
 			},
 			{

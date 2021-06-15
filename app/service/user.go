@@ -49,7 +49,15 @@ func (s *userService) CheckNickName(nickname string) bool {
 
 // 用户注册 db.Table("user").Delete("uid", 10)
 func (s *userService) Delete(r *model.UserRegisterServiceSignUpReq) error {
-	if _, err := dao.User.Delete(g.Map{"passport": r.Passport}); err != nil {
+	data := g.Map{}
+	if len(r.Passport) != 0 {
+		data = g.Map{"passport": r.Passport}
+	} else if len(r.Email) != 0 {
+		data = g.Map{"passport": r.Email}
+	} else {
+		data = g.Map{"passport": r.Phone}
+	}
+	if _, err := dao.User.Delete(data); err != nil {
 		return err
 	}
 	return nil
