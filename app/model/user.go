@@ -33,11 +33,11 @@ type UserRegisterApiMailSignUpReq struct {
 
 // 注册请求参数，用于前后端交互参数格式约定
 type UserRegisterApiPhoneSignUpReq struct {
-	Phone     string `v:"required|phone"`
-	Password  string `v:"required|length:6,16#请输入确认密码|密码长度应当在:min到:max之间"`
-	Password2 string `v:"required|length:6,16|same:Password#密码不能为空|密码长度应当在:min到:max之间|两次密码输入不相等"`
-	CaptchaReq
-	RegisterType int `v:"required|integer|between:1,3" json:"type"`
+	Phone        string `v:"required|phone"`
+	Password     string `v:"required|length:6,16#请输入确认密码|密码长度应当在:min到:max之间"`
+	Password2    string `v:"required|length:6,16|same:Password#密码不能为空|密码长度应当在:min到:max之间|两次密码输入不相等"`
+	RegisterType int    `v:"required|integer|between:1,3" json:"type"`
+	SmsCode      string `v:"required"|length:6`
 }
 
 // 登录请求参数，用于前后端交互参数格式约定

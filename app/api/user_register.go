@@ -4,6 +4,7 @@ import (
 	"gfapp/app/model"
 	"gfapp/app/service"
 	"gfapp/library/response"
+
 	"github.com/gogf/gf/net/ghttp"
 	"github.com/gogf/gf/util/gconv"
 )
@@ -28,7 +29,7 @@ func (a *userRegisterApi) Account(r *ghttp.Request) {
 		response.JsonExit(r, 1, err.Error())
 	}
 	if !service.Base.Verify(apiReq.CaptchaId, apiReq.Captcha, true) {
-		response.JsonExit(r, 1, service.StoreError.Error())
+		response.JsonExit(r, 400, service.StoreError.Error())
 	}
 	if err := gconv.Struct(apiReq, &serviceReq); err != nil {
 		response.JsonExit(r, 1, err.Error())
@@ -80,9 +81,6 @@ func (a *userRegisterApi) Phone(r *ghttp.Request) {
 	)
 	if err := r.ParseForm(&apiReq); err != nil {
 		response.JsonExit(r, 1, err.Error())
-	}
-	if !service.Base.Verify(apiReq.CaptchaId, apiReq.Captcha, true) {
-		response.JsonExit(r, 1, service.StoreError.Error())
 	}
 	if err := gconv.Struct(apiReq, &serviceReq); err != nil {
 		response.JsonExit(r, 1, err.Error())

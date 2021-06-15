@@ -1,6 +1,16 @@
 package response
 
-import "github.com/gogf/gf/net/ghttp"
+import (
+	"github.com/gogf/gf/frame/g"
+	"github.com/gogf/gf/net/ghttp"
+	"github.com/gogf/gf/os/glog"
+)
+
+var logger *glog.Logger
+
+func init() {
+	logger = g.Log("debug")
+}
 
 // 数据返回通用JSON数据结构
 type JsonResponse struct {
@@ -24,6 +34,12 @@ func Json(r *ghttp.Request, code int, message string, data ...interface{}) {
 
 // 返回JSON数据并退出当前HTTP执行函数。
 func JsonExit(r *ghttp.Request, err int, msg string, data ...interface{}) {
+	if err > 0 {
+		logger.Errorf("err:%v, msg:%v, data:%v", err, msg, data)
+	}
+	if err == 0 {
+		err = 200
+	}
 	Json(r, err, msg, data...)
 	r.Exit()
 }

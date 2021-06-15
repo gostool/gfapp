@@ -279,12 +279,6 @@
         "model.UserRegisterApiPhoneSignUpReq": {
             "type": "object",
             "properties": {
-                "captcha": {
-                    "type": "string"
-                },
-                "captchaId": {
-                    "type": "string"
-                },
                 "password": {
                     "type": "string"
                 },
@@ -292,6 +286,9 @@
                     "type": "string"
                 },
                 "phone": {
+                    "type": "string"
+                },
+                "smsCode": {
                     "type": "string"
                 },
                 "type": {

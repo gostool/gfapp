@@ -9,11 +9,11 @@
 [logger]
     Path        = "/tmp/log/gf-app"
     Level       = "all"
-    Stdout      = true
+    Stdout      = false
 [logger.debug]
     path   = "/tmp/log/gf-app/debug"
     level  = "dev"
-    stdout = true
+    stdout = false
 [logger.test]
 path   = "/tmp/log/gf-app/test"
 level  = "info"
