@@ -16,14 +16,15 @@ func init() {
 	//static files
 	v := g.Config().GetVar("upload")
 	uploadConf := v.MapStrVar()
-	enabled := uploadConf["enabled"].Bool()
-	if enabled {
+	indexFolderEnabled := uploadConf["indexFoldersEnabled"].Bool()
+	fileServerEnabled := uploadConf["fileServerEnabled"].Bool()
+	if fileServerEnabled {
 		uploadDir := uploadConf["dir"].String()
 		uploadUrl := uploadConf["url"].String()
 		if !utils.IsDir(uploadDir) {
 			_ = os.MkdirAll(uploadDir, os.ModePerm)
 		}
-		s.SetIndexFolder(enabled)
+		s.SetIndexFolder(indexFolderEnabled)
 		s.SetServerRoot(uploadDir)
 		s.AddStaticPath(uploadUrl, uploadDir)
 	}

@@ -15,11 +15,13 @@ func init() {
 	uploadConf := v.MapStrVar()
 	File.Dir = uploadConf["dir"].String()
 	File.Link = uploadConf["link"].String()
+	File.FileServerEnabled = uploadConf["fileServerEnabled"].Bool()
 }
 
 type fileService struct {
-	Dir  string
-	Link string
+	Dir               string
+	Link              string
+	FileServerEnabled bool
 }
 
 func (f *fileService) GetLink(filename string) string {
@@ -32,7 +34,9 @@ func (f *fileService) Save(file *ghttp.UploadFile) (filename string, err error) 
 	if err != nil {
 		return "", err
 	}
-	filename = f.GetLink(filename)
+	if File.FileServerEnabled {
+		filename = f.GetLink(filename)
+	}
 	return filename, nil
 }
 

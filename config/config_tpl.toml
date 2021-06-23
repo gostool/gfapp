@@ -26,7 +26,8 @@ stdout = false
 #     Delimiters  =  ["${", "}"]
 
 [upload]
-enabled = false
+IndexFoldersEnabled = true
+FileServerEnabled = true
 url = "/file/upload"
 link = "http://0.0.0.0:8080/file/upload"
 dir = "/tmp/upload"
