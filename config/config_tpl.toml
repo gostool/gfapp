@@ -25,6 +25,11 @@ stdout = false
     DefaultFile = "index.html"
 #     Delimiters  =  ["${", "}"]
 
+[upload]
+enabled = false
+url = "/file/upload"
+link = "http://0.0.0.0:8080/file/upload"
+dir = "/tmp/upload"
 # Database.
 [database]
     link  = "mysql:root:12345678@tcp(127.0.0.1:3306)/test"
