@@ -33,6 +33,7 @@ func (t *toolsApi) Captcha(r *ghttp.Request) {
 // @Tags tools
 // @Summary 文件上传到本地
 // @accept multipart/form-data
+// @Param file formData file true "file"
 // @Produce application/json
 // @Success 200 {string} string response.JsonResponse
 // @Router /api/tools/upload [post]
