@@ -2,6 +2,7 @@ package service
 
 import (
 	"fmt"
+	"gfapp/library/file/oss"
 
 	"github.com/gogf/gf/net/ghttp"
 
@@ -9,6 +10,7 @@ import (
 )
 
 var File = fileService{}
+var aliyun = oss.AliYunOSS{}
 
 func init() {
 	v := g.Config().GetVar("upload")
@@ -16,6 +18,14 @@ func init() {
 	File.Dir = uploadConf["dir"].String()
 	File.Link = uploadConf["link"].String()
 	File.FileServerEnabled = uploadConf["fileServerEnabled"].Bool()
+
+	v = g.Config().GetVar("aliyun")
+	aliyunConf := v.MapStrVar()
+	aliyun.BucketUrl = aliyunConf["bucketurl"].String()
+	aliyun.Endpoint = aliyunConf["endpoint"].String()
+	aliyun.AccessKeyID = aliyunConf["accessKeyID"].String()
+	aliyun.AccessKeySecret = aliyunConf["accessKeySecret"].String()
+	aliyun.BucketName = aliyunConf["bucketName"].String()
 }
 
 type fileService struct {
@@ -41,6 +51,10 @@ func (f *fileService) Save(file *ghttp.UploadFile) (filename string, err error) 
 }
 
 //todo
-func (f *fileService) SaveOss(file *ghttp.UploadFile) (filename string, err error) {
-	return file.Save("/tmp")
+func (f *fileService) SaveOss(file *ghttp.UploadFile) (fileUrl string, filePath string, err error) {
+	fileUrl, filePath, err = aliyun.UploadFile(file.FileHeader)
+	if err != nil {
+		return "", "", err
+	}
+	return fileUrl, filePath, nil
 }

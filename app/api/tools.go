@@ -3,6 +3,7 @@ package api
 import (
 	"gfapp/app/model"
 	"gfapp/app/service"
+	"gfapp/library/file/oss"
 	"gfapp/library/response"
 
 	"github.com/gogf/gf/frame/g"
@@ -39,12 +40,30 @@ func (t *toolsApi) Captcha(r *ghttp.Request) {
 // @Router /api/tools/upload [post]
 func (t *toolsApi) Upload(r *ghttp.Request) {
 	file := r.GetUploadFile("file")
+	file.Filename = oss.GetUUID() + "-" + file.Filename
 	logger.Debugf("file:%v", file)
 	filePath, err := service.File.Save(file)
 	if err != nil {
 		response.JsonExit(r, response.CODE_ERR, err.Error())
 	}
 	response.JsonExit(r, response.CODE_OK, "ok", g.Map{"link": filePath})
+}
+
+// @Tags toolhttps://oss.console.aliyun.com/bucket/oss-cn-beijing/htet/upload/img/2021-06-24/92f5ba22-d572-4ad5-b02e-7d02870fceb2.jpgs
+// @Summary 文件上传到oss
+// @accept multipart/form-data
+// @Param file formData file true "file"
+// @Produce application/json
+// @Success 200 {string} string response.JsonResponse
+// @Router /api/tools/upload-oss [post]
+func (t *toolsApi) UploadOss(r *ghttp.Request) {
+	file := r.GetUploadFile("file")
+	logger.Debugf("file:%v", file)
+	fileUrl, _, err := service.File.SaveOss(file)
+	if err != nil {
+		response.JsonExit(r, response.CODE_ERR, err.Error())
+	}
+	response.JsonExit(r, response.CODE_OK, "ok", g.Map{"link": fileUrl})
 }
 
 // @Tags tools
