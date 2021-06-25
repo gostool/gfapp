@@ -49,7 +49,7 @@ func (t *toolsApi) Upload(r *ghttp.Request) {
 	response.JsonExit(r, response.CODE_OK, "ok", g.Map{"link": filePath})
 }
 
-// @Tags toolhttps://oss.console.aliyun.com/bucket/oss-cn-beijing/htet/upload/img/2021-06-24/92f5ba22-d572-4ad5-b02e-7d02870fceb2.jpgs
+// @Tags tools
 // @Summary 文件上传到oss
 // @accept multipart/form-data
 // @Param file formData file true "file"
@@ -66,23 +66,23 @@ func (t *toolsApi) UploadOss(r *ghttp.Request) {
 	response.JsonExit(r, response.CODE_OK, "ok", g.Map{"link": fileUrl})
 }
 
-// @Tags tools
-// @Summary 生成token
-// @accept application/json
-// @Produce application/json
-// @Success 200 {string} string response.JsonResponse
-// @Router /api/tools/new-jwt [post]
-func (t *toolsApi) NewJwt(r *ghttp.Request) {
-	serviceReq := model.ClaimServiceReq{
-		Id: "1",
-	}
-	token, err := service.Base.NewJwt(&serviceReq)
-	if err != nil {
-		response.JsonExit(r, 1, err.Error())
-	} else {
-		response.JsonExit(r, 0, "ok", token)
-	}
-}
+//// @Tags tools
+//// @Summary 生成token
+//// @accept application/json
+//// @Produce application/json
+//// @Success 200 {string} string response.JsonResponse
+//// @Router /api/tools/new-jwt [post]
+//func (t *toolsApi) NewJwt(r *ghttp.Request) {
+//	serviceReq := model.ClaimServiceReq{
+//		Id: "1",
+//	}
+//	token, err := service.Base.NewJwt(&serviceReq)
+//	if err != nil {
+//		response.JsonExit(r, 1, err.Error())
+//	} else {
+//		response.JsonExit(r, 0, "ok", token)
+//	}
+//}
 
 func (t *toolsApi) ParseJwt(r *ghttp.Request) {
 	serviceReq := model.ClaimServiceReq{

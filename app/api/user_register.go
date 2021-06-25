@@ -17,7 +17,7 @@ var UserRegister = new(userRegisterApi)
 
 type userRegisterApi struct{}
 
-// @summary 用户注册接口
+// @summary 用户Account注册接口
 // @tags    用户服务
 // @produce json
 // @param   entity  body model.UserRegisterApiSignUpReq true "注册请求"

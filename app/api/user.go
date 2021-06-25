@@ -7,7 +7,6 @@ import (
 
 	"github.com/gogf/gf/crypto/gmd5"
 
-	"github.com/gogf/gf/frame/g"
 	"github.com/gogf/gf/net/ghttp"
 	"github.com/gogf/gf/util/gconv"
 )
@@ -23,7 +22,7 @@ type userAuthApi struct{}
 // @summary 用户登录接口
 // @tags    用户服务
 // @produce json
-// @param   entity body model.UserApiLoginReq
+// @param   entity  body model.UserApiLoginReq true "登陆请求"
 // @router  /api/user/login [POST]
 // @success 200 {object} response.JsonResponse "执行结果"
 func (a *userApi) Login(r *ghttp.Request) {
@@ -59,40 +58,40 @@ func (a *userApi) Login(r *ghttp.Request) {
 	response.JsonExit(r, response.CODE_OK, "ok", user)
 }
 
-// @summary 用户登录接口web
-// @tags    用户服务
-// @produce json
-// @param   passport formData string true "用户账号"
-// @param   password formData string true "用户密码"
-// @router  /api/user/sign-in [POST]
-// @success 200 {object} response.JsonResponse "执行结果"
-func (a *userApi) SignInWeb(r *ghttp.Request) {
-	var (
-		apiReq     *model.UserApiSignInWebReq
-		serviceReq *model.UserServiceSignInWebReq
-	)
-	if err := r.ParseForm(&apiReq); err != nil {
-		response.JsonExit(r, 1, err.Error())
-	}
-	if err := gconv.Struct(apiReq, &serviceReq); err != nil {
-		response.JsonExit(r, 1, err.Error())
-	}
-	user, err := service.User.LoginWeb(r.Context(), serviceReq)
-	if err != nil {
-		response.JsonExit(r, 1, err.Error())
-	}
-	token, err := service.Base.NewJwt(&model.ClaimServiceReq{
-		Id:   gconv.String(user.Id),
-		Salt: "",
-	})
-	if err != nil {
-		response.JsonExit(r, 1, err.Error())
-	}
-	response.JsonExit(r, 0, "ok", g.Map{
-		"Id":    user.Id,
-		"token": token,
-	})
-}
+//// @summary 用户登录接口web
+//// @tags    用户服务
+//// @produce json
+//// @param   passport formData string true "用户账号"
+//// @param   password formData string true "用户密码"
+//// @router  /api/user/sign-in [POST]
+//// @success 200 {object} response.JsonResponse "执行结果"
+//func (a *userApi) SignInWeb(r *ghttp.Request) {
+//	var (
+//		apiReq     *model.UserApiSignInWebReq
+//		serviceReq *model.UserServiceSignInWebReq
+//	)
+//	if err := r.ParseForm(&apiReq); err != nil {
+//		response.JsonExit(r, 1, err.Error())
+//	}
+//	if err := gconv.Struct(apiReq, &serviceReq); err != nil {
+//		response.JsonExit(r, 1, err.Error())
+//	}
+//	user, err := service.User.LoginWeb(r.Context(), serviceReq)
+//	if err != nil {
+//		response.JsonExit(r, 1, err.Error())
+//	}
+//	token, err := service.Base.NewJwt(&model.ClaimServiceReq{
+//		Id:   gconv.String(user.Id),
+//		Salt: "",
+//	})
+//	if err != nil {
+//		response.JsonExit(r, 1, err.Error())
+//	}
+//	response.JsonExit(r, 0, "ok", g.Map{
+//		"Id":    user.Id,
+//		"token": token,
+//	})
+//}
 
 // @summary 用户注销/退出接口
 // @tags    用户服务
