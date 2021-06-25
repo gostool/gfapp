@@ -5,6 +5,9 @@ import (
 	"gfapp/app/service"
 	"gfapp/library/response"
 
+	"github.com/gogf/gf/crypto/gmd5"
+	"github.com/gogf/gf/frame/g"
+
 	"github.com/gogf/gf/net/ghttp"
 	"github.com/gogf/gf/util/gconv"
 )
@@ -23,21 +26,28 @@ type userRegisterApi struct{}
 func (a *userRegisterApi) Account(r *ghttp.Request) {
 	var (
 		apiReq     *model.UserRegisterApiSignUpReq
-		serviceReq *model.UserRegisterServiceSignUpReq
+		serviceReq *model.UserRegisterServiceReq
 	)
 	if err := r.ParseForm(&apiReq); err != nil {
-		response.JsonExit(r, 1, err.Error())
+		response.JsonExit(r, response.CODE_BAD, err.Error())
 	}
 	if !service.Base.Verify(apiReq.CaptchaId, apiReq.Captcha, true) {
-		response.JsonExit(r, 400, service.StoreError.Error())
+		response.JsonExit(r, response.CODE_BAD, service.StoreError.Error())
 	}
 	if err := gconv.Struct(apiReq, &serviceReq); err != nil {
-		response.JsonExit(r, 1, err.Error())
+		response.JsonExit(r, response.CODE_ERR, err.Error())
 	}
-	if err := service.User.Register(serviceReq); err != nil {
-		response.JsonExit(r, 1, err.Error())
+	//md5 password
+	password, err := gmd5.EncryptString(serviceReq.Password)
+	if err != nil {
+		response.JsonExit(r, response.CODE_ERR, err.Error())
+	}
+	serviceReq.Passport = password
+	id, err := service.User.RegisterAccount(serviceReq)
+	if err != nil {
+		response.JsonExit(r, response.CODE_BAD, err.Error())
 	} else {
-		response.JsonExit(r, 0, "ok")
+		response.JsonExit(r, response.CODE_OK, "ok", g.Map{"id": id})
 	}
 }
 
@@ -50,7 +60,7 @@ func (a *userRegisterApi) Account(r *ghttp.Request) {
 func (a *userRegisterApi) Email(r *ghttp.Request) {
 	var (
 		apiReq     *model.UserRegisterApiMailSignUpReq
-		serviceReq *model.UserRegisterServiceSignUpReq
+		serviceReq *model.UserRegisterServiceReq
 	)
 	if err := r.ParseForm(&apiReq); err != nil {
 		response.JsonExit(r, 1, err.Error())
@@ -61,10 +71,11 @@ func (a *userRegisterApi) Email(r *ghttp.Request) {
 	if err := gconv.Struct(apiReq, &serviceReq); err != nil {
 		response.JsonExit(r, 1, err.Error())
 	}
-	if err := service.User.Register(serviceReq); err != nil {
+	id, err := service.User.RegisterEmail(serviceReq)
+	if err != nil {
 		response.JsonExit(r, 1, err.Error())
 	} else {
-		response.JsonExit(r, 0, "ok")
+		response.JsonExit(r, 0, "ok", g.Map{"id": id})
 	}
 }
 
@@ -77,7 +88,7 @@ func (a *userRegisterApi) Email(r *ghttp.Request) {
 func (a *userRegisterApi) Phone(r *ghttp.Request) {
 	var (
 		apiReq     *model.UserRegisterApiPhoneSignUpReq
-		serviceReq *model.UserRegisterServiceSignUpReq
+		serviceReq *model.UserRegisterServiceReq
 	)
 	if err := r.ParseForm(&apiReq); err != nil {
 		response.JsonExit(r, 1, err.Error())
@@ -85,9 +96,10 @@ func (a *userRegisterApi) Phone(r *ghttp.Request) {
 	if err := gconv.Struct(apiReq, &serviceReq); err != nil {
 		response.JsonExit(r, 1, err.Error())
 	}
-	if err := service.User.Register(serviceReq); err != nil {
+	id, err := service.User.RegisterPhone(serviceReq)
+	if err != nil {
 		response.JsonExit(r, 1, err.Error())
 	} else {
-		response.JsonExit(r, 0, "ok")
+		response.JsonExit(r, 0, "ok", g.Map{"id": id})
 	}
 }

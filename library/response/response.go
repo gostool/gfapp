@@ -48,3 +48,10 @@ type Captcha struct {
 	Id   string `json:"captchaId"`
 	Path string `json:"picPath"`
 }
+
+//context user message
+type User struct {
+	Id       int    `json:"id"`
+	Passport string `json:"passport"`
+	Token    string `json:"token"`
+}

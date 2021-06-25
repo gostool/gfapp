@@ -3,6 +3,7 @@ package router
 import (
 	"gfapp/app/api"
 	"gfapp/app/service"
+
 	"github.com/gogf/gf/frame/g"
 	"github.com/gogf/gf/net/ghttp"
 )
@@ -21,13 +22,17 @@ func init() {
 				"/tools":         api.Tools,
 				"/user":          api.User,
 			})
-			group.Middleware(service.Middleware.Auth)
-			group.ALL("/user", api.UserAuth)
 		})
 		group.Group("/api", func(group *ghttp.RouterGroup) {
-			group.Middleware(service.Middleware.AuthWeb)
-			group.ALL("/userWeb", api.UserAuthWeb)
+			group.Middleware(service.Middleware.JwtAuth)
+			//user module
+			group.ALLMap(g.Map{
+				"/user": api.UserAuth,
+			})
 		})
+		//group.Group("/api", func(group *ghttp.RouterGroup) {
+		//	group.Middleware(service.Middleware.AuthWeb)
+		//})
 	})
 }
 

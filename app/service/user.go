@@ -5,6 +5,8 @@ import (
 	"errors"
 	"gfapp/app/dao"
 	"gfapp/app/model"
+	"gfapp/library/response"
+
 	"github.com/gogf/gf/frame/g"
 )
 
@@ -13,42 +15,39 @@ var User = userService{}
 
 type userService struct{}
 
+func (s *userService) InsertAndGetID(data *g.Map) (id int64, err error) {
+	if id, err := dao.User.InsertAndGetId(data); err != nil {
+		return id, err
+	}
+	return id, nil
+}
+
 // 用户注册
-func (s *userService) Register(r *model.UserRegisterServiceSignUpReq) error {
-	//// 账号唯一性数据检查
-	//if !s.CheckPassport(r.Passport) {
-	//	return errors.New(fmt.Sprintf("账号 %s 已经存在", r.Passport))
-	//}
-	//// 昵称唯一性数据检查
-	//if !s.CheckNickName(r.Nickname) {
-	//	return errors.New(fmt.Sprintf("昵称 %s 已经存在", r.Nickname))
-	//}
-	if _, err := dao.User.Insert(r.ToMap()); err != nil {
-		return err
-	}
-	return nil
+func (s *userService) RegisterAccount(r *model.UserRegisterServiceReq) (id int64, err error) {
+	return s.InsertAndGetID(r.ToMap())
 }
 
-// 检查账号是否符合规范(目前仅检查唯一性),存在返回false,否则true
-func (s *userService) CheckPassport(passport string) bool {
-	if i, err := dao.User.FindCount("passport", passport); err != nil {
-		return false
-	} else {
-		return i == 0
-	}
+func (s *userService) RegisterEmail(r *model.UserRegisterServiceReq) (id int64, err error) {
+	return s.InsertAndGetID(r.ToMap())
 }
 
-// 检查昵称是否符合规范(目前仅检查唯一性),存在返回false,否则true
-func (s *userService) CheckNickName(nickname string) bool {
-	if i, err := dao.User.FindCount("nickname", nickname); err != nil {
-		return false
-	} else {
-		return i == 0
+func (s *userService) RegisterPhone(r *model.UserRegisterServiceReq) (id int64, err error) {
+	return s.InsertAndGetID(r.ToMap())
+}
+
+func (s *userService) Find(pk int64) (user *model.User, err error) {
+	user, err = dao.User.FindOne("id=? and is_deleted=?", pk, 0)
+	if err != nil {
+		return nil, err
 	}
+	if user == nil {
+		return nil, errors.New("user is not exist")
+	}
+	return user, nil
 }
 
 // 用户注册 db.Table("user").Delete("uid", 10)
-func (s *userService) Delete(r *model.UserRegisterServiceSignUpReq) error {
+func (s *userService) Delete(r *model.UserRegisterServiceReq) error {
 	data := g.Map{}
 	if len(r.Passport) != 0 {
 		data = g.Map{"passport": r.Passport}
@@ -85,27 +84,23 @@ func (s *userService) IsSignedInWeb(token string, id string, salt string) bool {
 }
 
 // 用户登录，成功返回用户信息，否则返回nil; passport应当会md5值字符串
-func (s *userService) SignIn(ctx context.Context, passport, password string) error {
-	user, err := dao.User.FindOne("passport=? and password=?", passport, password)
+func (s *userService) Login(r *model.UserServiceLoginReq) (data *response.User, err error) {
+	user, err := dao.User.FindOne(r.ToMap)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	if user == nil {
-		return errors.New("账号或密码错误")
+		return nil, errors.New("账号或密码错误")
 	}
-	if err := Session.SetUser(ctx, user); err != nil {
-		return err
-	}
-	Context.SetUser(ctx, &model.ContextUser{
+	data = &response.User{
 		Id:       user.Id,
 		Passport: user.Passport,
-		Name:     user.Name,
-	})
-	return nil
+	}
+	return data, nil
 }
 
 // 用户登录，成功返回用户信息，否则返回nil; passport应当会md5值字符串
-func (s *userService) SignInWeb(ctx context.Context, r *model.UserServiceSignInWebReq) (user *model.User, err error) {
+func (s *userService) LoginWeb(ctx context.Context, r *model.UserServiceSignInWebReq) (user *model.User, err error) {
 	user, err = dao.User.FindOne("passport=? and password=?", r.Username, r.Password)
 	if err != nil {
 		return nil, err
@@ -118,7 +113,7 @@ func (s *userService) SignInWeb(ctx context.Context, r *model.UserServiceSignInW
 }
 
 // 用户注销
-func (s *userService) SignOut(ctx context.Context) error {
+func (s *userService) LogOut(ctx context.Context) error {
 	return Session.RemoveUser(ctx)
 }
 

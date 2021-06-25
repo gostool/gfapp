@@ -2,8 +2,12 @@ package service
 
 import (
 	"gfapp/app/model"
-	"github.com/gogf/gf/net/ghttp"
+	"gfapp/library/response"
 	"net/http"
+
+	"github.com/gogf/gf/util/gconv"
+
+	"github.com/gogf/gf/net/ghttp"
 )
 
 // 中间件管理服务
@@ -41,6 +45,25 @@ func (s *middlewareService) Auth(r *ghttp.Request) {
 		r.Middleware.Next()
 	} else {
 		r.Response.WriteStatus(http.StatusForbidden)
+	}
+}
+
+func (s *middlewareService) JwtAuth(r *ghttp.Request) {
+	token := r.GetHeader("token")
+	if token == "" {
+		response.JsonExit(r, response.CODE_TOKEN, "token is not allow to be empty")
+	}
+	uid, err := Token.CheckToken(token)
+	if err != nil {
+		response.JsonExit(r, response.CODE_TOKEN, err.Error())
+	}
+	user, err := User.Find(gconv.Int64(uid))
+	if err != nil {
+		response.JsonExit(r, response.CODE_TOKEN, err.Error())
+	} else {
+		r.SetParam("uid", user.Id)
+		r.SetParam("data", user.ToData())
+		r.Middleware.Next()
 	}
 }
 
