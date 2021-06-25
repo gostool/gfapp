@@ -62,3 +62,7 @@ key-long = 6
 image-width = 240
 image-height = 80
 captcha-in-redis = false
+
+[jwt]
+salt    = "mapsalt"
+exp     = 604800  # 单位s(60*60*24*7)
