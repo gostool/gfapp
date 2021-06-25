@@ -110,7 +110,7 @@ func (a *userAuthApi) Logout(r *ghttp.Request) {
 // @summary 获取用户详情
 // @tags    用户服务
 // @produce json
-// @router  /api/user/profile [GET]
+// @router  /api/user/get-profile [GET]
 // @success 200 {object} response.JsonResponse "用户详情"
 func (a *userAuthApi) GetProfile(r *ghttp.Request) {
 	data := r.GetParam("data")
