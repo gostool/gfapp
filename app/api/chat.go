@@ -1,8 +1,11 @@
 package api
 
 import (
+	"context"
 	"fmt"
 	"gfapp/app/model"
+	"time"
+
 	"github.com/gogf/gf/container/garray"
 	"github.com/gogf/gf/container/gmap"
 	"github.com/gogf/gf/container/gset"
@@ -14,7 +17,6 @@ import (
 	"github.com/gogf/gf/os/gcache"
 	"github.com/gogf/gf/util/gconv"
 	"github.com/gogf/gf/util/gvalid"
-	"time"
 )
 
 // 聊天管理器
@@ -127,7 +129,7 @@ func (a *chatApi) WebSocket(r *ghttp.Request) {
 			continue
 		}
 		// 数据校验
-		if err := gvalid.CheckStruct(msg, nil); err != nil {
+		if err := gvalid.CheckStruct(context.TODO(), msg, nil); err != nil {
 			a.write(ws, model.ChatMsg{
 				Type: "error",
 				Data: gerror.Current(err).Error(),

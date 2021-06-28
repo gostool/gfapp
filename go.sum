@@ -14,11 +14,12 @@ github.com/dgrijalva/jwt-go v3.2.0+incompatible h1:7qlOGliEKZXTDg6OTjfoBKDXWrumC
 github.com/dgrijalva/jwt-go v3.2.0+incompatible/go.mod h1:E3ru+11k8xSBh+hMPgOLZmtrrCbhqsmaPHjLKYnJCaQ=
 github.com/fsnotify/fsnotify v1.4.9 h1:hsms1Qyu0jgnwNXIxa+/V/PDsU6CfLf6CNO8H7IWoS4=
 github.com/fsnotify/fsnotify v1.4.9/go.mod h1:znqG4EE+3YCdAaPaxE2ZRY/06pZUdp0tY4IgpuI1SZQ=
-github.com/go-sql-driver/mysql v1.5.0 h1:ozyZYNQW3x3HtqT1jira07DN2PArx2v7/mN66gGcHOs=
 github.com/go-sql-driver/mysql v1.5.0/go.mod h1:DCzpHaOWr8IXmIStZouvnhqoel9Qv2LBy8hT2VhHyBg=
 github.com/gogf/gf v1.14.0/go.mod h1:7b21qQKDyIwJO4PkBCxVci5C62tm89MANGV2wJgAf50=
-github.com/gogf/gf v1.15.7 h1:MrVybM5P2jlHqZsYhqEZPxHsj0Y5TlwWuIKuYoosGPg=
-github.com/gogf/gf v1.15.7/go.mod h1:5eEgE9fWeRQW8dJE3GLpCy0KkNitXh6POesdJiBE/lw=
+github.com/gogf/gf v1.16.4 h1:1Y8/P1UMp9BmrtUn0wAg3g6ElRAO0R9QHCdUNt9Z5L4=
+github.com/gogf/gf v1.16.4/go.mod h1:EjnxZXddTwfFoLPofDE3NokFWx+immofINtSyFCj280=
+github.com/gogf/mysql v1.6.1-0.20210603073548-16164ae25579 h1:pP/uEy52biKDytlgK/ug8kiYPAiYu6KajKVUHfGrtyw=
+github.com/gogf/mysql v1.6.1-0.20210603073548-16164ae25579/go.mod h1:52e6mXyNnHAsFrXrSnj5JPRSKsZKpHylVtA3j4AtMz8=
 github.com/gogf/swagger v1.2.0 h1:GEy23WW0RWY+mHgD6wIciP+45Low8Jq2PVjvoSbvp0E=
 github.com/gogf/swagger v1.2.0/go.mod h1:sp5SN+UmVFDCDpGLF/KQDtMc/aN636Po81qFfgGj6Os=
 github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 h1:DACJavvAHhabrF08vX0COfcOBJRhZ8lUbR+ZWIs0Y5g=
