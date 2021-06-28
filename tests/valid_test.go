@@ -1,10 +1,12 @@
 package tests
 
 import (
+	"context"
+	"testing"
+
 	"github.com/gogf/gf/frame/g"
 	"github.com/gogf/gf/test/gtest"
 	"github.com/gogf/gf/util/gvalid"
-	"testing"
 )
 
 func TestValidCheckStr(t *testing.T) {
@@ -37,7 +39,7 @@ func TestValidCheckStr(t *testing.T) {
 			},
 		}
 		for _, data := range dataTests {
-			m := gvalid.Check(data.input, data.rule, data.msg)
+			m := gvalid.CheckValue(context.TODO(), data.input, data.rule, data.msg)
 			if m != nil {
 				t.Log(m.Error())
 				t.AssertEQ(m.String(), data.msg)
@@ -67,7 +69,7 @@ func TestCheckValidInt(t *testing.T) {
 			},
 		}
 		for _, data := range dataTests {
-			m := gvalid.Check(data.input, data.rule, data.msg)
+			m := gvalid.CheckValue(context.TODO(), data.input, data.rule, data.msg)
 			if m != nil {
 				t.Log(m.Error())
 				t.AssertEQ(m.String(), data.msg)
@@ -95,7 +97,7 @@ func TestValidStruct(t *testing.T) {
 			"same":     "两次密码输入不相等",
 		},
 	}
-	if e := gvalid.CheckMap(params, rules, msgs); e != nil {
+	if e := gvalid.CheckMap(context.TODO(), params, rules, msgs); e != nil {
 		//g.Dump(e.Map())
 		g.Dump(e.Maps())
 	} else {
@@ -124,7 +126,7 @@ func TestStruct(t *testing.T) {
 	}
 
 	// 使用结构体定义的校验规则和错误提示进行校验
-	if e := gvalid.CheckStruct(user, nil); e != nil {
+	if e := gvalid.CheckStruct(context.TODO(), user, nil); e != nil {
 		g.Dump(e.Maps())
 	}
 }
