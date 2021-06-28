@@ -4,11 +4,14 @@ import (
 	"gfapp/app/model"
 	"gfapp/app/service"
 	"testing"
+
+	"github.com/gogf/gf/frame/g"
 )
 
 var testUserServiceReq model.UserRegisterServiceReq
 var testUserServiceMailReq model.UserRegisterServiceReq
 var testUserServicePhoneReq model.UserRegisterServiceReq
+var testUserServiceLoginReq model.UserServiceLoginReq
 
 func init() {
 	testUserServiceReq = model.UserRegisterServiceReq{
@@ -25,6 +28,10 @@ func init() {
 		Phone:        "17792301520",
 		Password:     "123456",
 		RegisterType: 3,
+	}
+	testUserServiceLoginReq = model.UserServiceLoginReq{
+		Passport: "admin04",
+		Password: "654321",
 	}
 }
 
@@ -75,8 +82,12 @@ func TestServicePhoneRegister(t *testing.T) {
 	}
 }
 
-func TestServiceSignIn(t *testing.T) {
-
+func TestServiceLogin(t *testing.T) {
+	data, err := service.User.Login(&testUserServiceLoginReq)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Logf("data:%v", data)
 }
 
 func TestServiceDelete(t *testing.T) {
@@ -92,4 +103,12 @@ func TestServiceDelete(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+}
+
+func TestServiceFind(t *testing.T) {
+	user, err := service.User.Find(32)
+	if err != nil {
+		t.Fatal(err)
+	}
+	g.Dump(user)
 }

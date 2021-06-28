@@ -37,12 +37,26 @@ func (s *userService) RegisterPhone(r *model.UserRegisterServiceReq) (id int64, 
 }
 
 func (s *userService) Find(pk int64) (user *model.User, err error) {
-	user, err = dao.User.FindOne("id=? and is_deleted=?", pk, 0)
+	fields := g.ArrayStr{
+		"id",
+		"type",
+		"passport",
+		"name",
+	}
+	one, err := dao.User.Fields(fields).FindOne("id=? and is_deleted=?", pk, 0)
 	if err != nil {
 		return nil, err
 	}
-	if user == nil {
+	if one.IsEmpty() {
 		return nil, errors.New("user is not exist")
+	}
+	user = &model.User{
+		Id:       one["id"].Int(),
+		Type:     one["type"].Int(),
+		Passport: one["passport"].String(),
+		Email:    one["email"].String(),
+		Phone:    one["phone"].String(),
+		Name:     one["name"].String(),
 	}
 	return user, nil
 }
@@ -106,28 +120,29 @@ func (s *userService) Login(r *model.UserServiceLoginReq) (data *response.User, 
 	if err != nil {
 		return nil, err
 	}
-	if user == nil {
+	if user.IsEmpty() {
 		return nil, errors.New("账号或密码错误")
 	}
+	userMp := user.Map()
 	data = &response.User{
-		Id:       user.Id,
-		Passport: user.Passport,
+		Id:       userMp["id"].(int),
+		Passport: userMp["passport"].(string),
 	}
 	return data, nil
 }
 
 // 用户登录，成功返回用户信息，否则返回nil; passport应当会md5值字符串
-func (s *userService) LoginWeb(ctx context.Context, r *model.UserServiceSignInWebReq) (user *model.User, err error) {
-	user, err = dao.User.FindOne("passport=? and password=?", r.Username, r.Password)
-	if err != nil {
-		return nil, err
-	}
-	if user == nil {
-		return nil, errors.New("账号或密码错误")
-	}
-	Context.SetUserWeb(ctx, user)
-	return user, nil
-}
+//func (s *userService) LoginWeb(ctx context.Context, r *model.UserServiceSignInWebReq) (user *model.User, err error) {
+//	user, err = dao.User.FindOne("passport=? and password=?", r.Username, r.Password)
+//	if err != nil {
+//		return nil, err
+//	}
+//	if user == nil {
+//		return nil, errors.New("账号或密码错误")
+//	}
+//	Context.SetUserWeb(ctx, user)
+//	return user, nil
+//}
 
 // 用户注销
 func (s *userService) LogOut(ctx context.Context) error {

@@ -5,13 +5,8 @@
 package model
 
 import (
-	"gfapp/app/model/internal"
-
 	"github.com/gogf/gf/frame/g"
 )
-
-// User is the golang structure for table user.
-type User internal.User
 
 // Fill with you ideas below.
 // 登录请求参数，用于前后端交互参数格式约定
