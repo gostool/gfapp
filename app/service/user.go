@@ -16,8 +16,9 @@ var User = userService{}
 type userService struct{}
 
 func (s *userService) InsertAndGetID(data *g.Map) (id int64, err error) {
-	if id, err := dao.User.InsertAndGetId(data); err != nil {
-		return id, err
+	id, err = dao.User.InsertAndGetId(data)
+	if err != nil {
+		return -1, err
 	}
 	return id, nil
 }
