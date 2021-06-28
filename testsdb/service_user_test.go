@@ -39,6 +39,14 @@ func TestServiceRegister(t *testing.T) {
 	} else {
 		t.Logf("ID:%v\n", id)
 	}
+	err = service.User.UpdateName(id, "newAdmin")
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = service.User.UpdatePwd(id, "654321")
+	if err != nil {
+		t.Fatal(err)
+	}
 }
 
 func TestServiceMailRegister(t *testing.T) {
