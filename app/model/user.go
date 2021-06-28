@@ -26,6 +26,16 @@ type UserServiceLoginReq struct {
 	Password string `json:"password"`
 }
 
+type UserApiUpdatePwdReq struct {
+	Password  string `v:"required|length:6,16#请输入确认密码|密码长度应当在:min到:max之间"`
+	Password2 string `v:"required|length:6,16|same:Password#密码不能为空|密码长度应当在:min到:max之间|两次密码输入不相等"`
+}
+
+type UserServiceUpdatePwdReq struct {
+	Password  string `json:"password"`
+	Password2 string
+}
+
 // 登录请求参数，用于前后端交互参数格式约定
 type UserApiSignInWebReq struct {
 	Username string `v:"required#账号不能为空" json:"username"`

@@ -115,3 +115,49 @@ func (a *userAuthApi) GetProfile(r *ghttp.Request) {
 	data := r.GetParam("data")
 	response.JsonExit(r, response.CODE_OK, "ok", data)
 }
+
+// update name
+// @summary 更新用户name
+// @tags    用户服务
+// @produce json
+// @router  /api/user/update [POST]
+// @success 200 {object} response.JsonResponse "执行结果"
+func (a *userAuthApi) Update(r *ghttp.Request) {
+	uid := r.GetParam("uid").(int64)
+	newName := r.Get("name").(string)
+	err := service.User.UpdateName(uid, newName)
+	if err != nil {
+		response.JsonExit(r, response.CODE_ERR, "update name failed")
+	}
+	response.JsonExit(r, response.CODE_OK, "ok")
+}
+
+// update pwd
+// @summary 更新用户pwd
+// @tags    用户服务
+// @produce json
+// @router  /api/user/update-pwd [POST]
+// @success 200 {object} response.JsonResponse "执行结果"
+func (a *userAuthApi) UpdatePwd(r *ghttp.Request) {
+	var (
+		apiReq     *model.UserApiUpdatePwdReq
+		serviceReq *model.UserServiceUpdatePwdReq
+	)
+	uid := r.GetParam("uid").(int64)
+	if err := r.Parse(&apiReq); err != nil {
+		response.JsonExit(r, response.CODE_BAD, err.Error())
+	}
+	if err := gconv.Struct(apiReq, &serviceReq); err != nil {
+		response.JsonExit(r, response.CODE_ERR, err.Error())
+	}
+	//md5 password
+	password, err := gmd5.EncryptString(serviceReq.Password)
+	if err != nil {
+		response.JsonExit(r, response.CODE_ERR, err.Error())
+	}
+	err = service.User.UpdatePwd(uid, password)
+	if err != nil {
+		response.JsonExit(r, response.CODE_ERR, "update pwd failed")
+	}
+	response.JsonExit(r, response.CODE_OK, "ok")
+}

@@ -62,6 +62,22 @@ func (s *userService) Delete(r *model.UserRegisterServiceReq) error {
 	return nil
 }
 
+func (s *userService) UpdateName(uid int64, name string) error {
+	_, err := dao.User.Where("id=?", uid).Update(g.Map{"name": name})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *userService) UpdatePwd(uid int64, password string) error {
+	_, err := dao.User.Where("id=?", uid).Update(g.Map{"password": password})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // 判断用户是否已经登录
 func (s *userService) IsSignedIn(ctx context.Context) bool {
 	if v := Context.Get(ctx); v != nil && v.User != nil {
