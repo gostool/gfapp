@@ -50,6 +50,16 @@ dir = "/tmp/upload"
 [[gfcli.gen.model]]
     link  = "mysql:root:12345678@tcp(127.0.0.1:3306)/test"
     tables = "user,post"
+[gfcli.build]
+name = "main"
+arch = "amd64"
+system = "linux"
+mod = "none"
+cgo = 0
+pack = ""
+version = "0.1.9.0"
+output = "./bin"
+extra = ""
 
 # Redis数据库配置
 [redis]
