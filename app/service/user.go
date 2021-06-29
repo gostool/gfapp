@@ -110,18 +110,19 @@ func (s *userService) IsSignedInWeb(token string, id string, salt string) bool {
 
 // 用户登录，成功返回用户信息，否则返回nil; passport应当会md5值字符串
 func (s *userService) Login(r *model.UserServiceLoginReq) (data *response.User, err error) {
-	user, err := dao.User.FindOne(r.ToMap)
+	fields := g.ArrayStr{
+		"id",
+		"passport",
+	}
+	one, err := dao.User.Fields(fields).FindOne("passport=? and is_deleted=? and password=?", r.Passport, 0, r.Password)
 	if err != nil {
 		return nil, err
 	}
-	if user.IsEmpty() {
+	if one.IsEmpty() {
 		return nil, errors.New("账号或密码错误")
 	}
-	userMp := user.Map()
-	data = &response.User{
-		Id:       userMp["id"].(int),
-		Passport: userMp["passport"].(string),
-	}
+	data = (*response.User)(nil)
+	one.Struct(&data)
 	return data, nil
 }
 

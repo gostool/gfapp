@@ -5,6 +5,8 @@ import (
 	"gfapp/app/service"
 	"testing"
 
+	"github.com/gogf/gf/crypto/gmd5"
+
 	"github.com/gogf/gf/frame/g"
 )
 
@@ -40,6 +42,11 @@ func TestServiceRegister(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	password, err := gmd5.EncryptString(testUserServiceReq.Password)
+	if err != nil {
+		t.Fatal(err)
+	}
+	testUserServiceReq.Password = password
 	id, err := service.User.RegisterAccount(&testUserServiceReq)
 	if err != nil {
 		t.Fatal(err)
@@ -50,7 +57,11 @@ func TestServiceRegister(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	err = service.User.UpdatePwd(id, "654321")
+	newPwd, err := gmd5.EncryptString("654321")
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = service.User.UpdatePwd(id, newPwd)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -61,6 +72,11 @@ func TestServiceMailRegister(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	password, err := gmd5.EncryptString(testUserServiceMailReq.Password)
+	if err != nil {
+		t.Fatal(err)
+	}
+	testUserServiceMailReq.Password = password
 	id, err := service.User.RegisterEmail(&testUserServiceMailReq)
 	if err != nil {
 		t.Fatal(err)
@@ -74,6 +90,11 @@ func TestServicePhoneRegister(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	password, err := gmd5.EncryptString(testUserServicePhoneReq.Password)
+	if err != nil {
+		t.Fatal(err)
+	}
+	testUserServicePhoneReq.Password = password
 	id, err := service.User.RegisterPhone(&testUserServicePhoneReq)
 	if err != nil {
 		t.Fatal(err)
@@ -83,6 +104,11 @@ func TestServicePhoneRegister(t *testing.T) {
 }
 
 func TestServiceLogin(t *testing.T) {
+	password, err := gmd5.EncryptString(testUserServiceLoginReq.Password)
+	if err != nil {
+		t.Fatal(err)
+	}
+	testUserServiceLoginReq.Password = password
 	data, err := service.User.Login(&testUserServiceLoginReq)
 	if err != nil {
 		t.Fatal(err)
@@ -106,7 +132,7 @@ func TestServiceDelete(t *testing.T) {
 }
 
 func TestServiceFind(t *testing.T) {
-	user, err := service.User.Find(32)
+	user, err := service.User.Find(36)
 	if err != nil {
 		t.Fatal(err)
 	}
