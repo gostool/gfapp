@@ -31,6 +31,18 @@ func (t *toolsApi) Captcha(r *ghttp.Request) {
 	}
 }
 
+// Version
+// @Tags tools
+// @Summary 获取版本号
+// @accept application/json
+// @Produce application/json
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"版本号获取成功"}"
+// @Router /api/tools/version [get]
+func (t *toolsApi) Version(r *ghttp.Request) {
+	version := GetVersion()
+	response.JsonExit(r, response.CODE_OK, "ok", g.Map{"version": version})
+}
+
 // @Tags tools
 // @Summary 文件上传到本地
 // @accept multipart/form-data

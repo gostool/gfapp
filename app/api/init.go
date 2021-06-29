@@ -10,3 +10,10 @@ var logger *glog.Logger
 func init() {
 	logger = g.Log("debug")
 }
+
+func GetVersion() (version string) {
+	v := g.Config().GetVar("gfcli.build")
+	buildConf := v.MapStrVar()
+	version = buildConf["version"].String()
+	return version
+}
