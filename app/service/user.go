@@ -50,14 +50,8 @@ func (s *userService) Find(pk int64) (user *model.User, err error) {
 	if one.IsEmpty() {
 		return nil, errors.New("user is not exist")
 	}
-	user = &model.User{
-		Id:       one["id"].Int(),
-		Type:     one["type"].Int(),
-		Passport: one["passport"].String(),
-		Email:    one["email"].String(),
-		Phone:    one["phone"].String(),
-		Name:     one["name"].String(),
-	}
+	user = (*model.User)(nil)
+	one.Struct(&user)
 	return user, nil
 }
 
