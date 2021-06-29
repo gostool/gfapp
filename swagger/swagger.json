@@ -76,6 +76,34 @@
                 }
             }
         },
+        "/api/tools/qrcode": {
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "tools"
+                ],
+                "summary": "生成二维码",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "用户url",
+                        "name": "url",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"二维码获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/api/tools/upload": {
             "post": {
                 "consumes": [

@@ -31,6 +31,21 @@ func (t *toolsApi) Captcha(r *ghttp.Request) {
 	}
 }
 
+// @Tags tools
+// @Summary 生成二维码
+// @param url formData string true "用户url"
+// @Produce application/json
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"二维码获取成功"}"
+// @Router /api/tools/qrcode [post]
+func (t *toolsApi) Qrcode(r *ghttp.Request) {
+	result, err := service.Base.Qrcode(r.Get("url").(string))
+	if err != nil {
+		response.JsonExit(r, 1, err.Error())
+	} else {
+		response.JsonExit(r, 0, "ok", result)
+	}
+}
+
 // Version
 // @Tags tools
 // @Summary 获取版本号

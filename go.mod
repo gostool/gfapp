@@ -15,6 +15,8 @@ require (
 	github.com/mojocn/base64Captcha v1.3.4
 	github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e // indirect
 	github.com/satori/go.uuid v1.2.0
+	github.com/skip2/go-qrcode v0.0.0-20200617195104-da1b6568686e
+	golang.org/x/image v0.0.0-20190501045829-6d32002ffd75
 	golang.org/x/time v0.0.0-20210611083556-38a9dc6acbc6 // indirect
 	gopkg.in/check.v1 v1.0.0-20200227125254-8fa46927fb4f // indirect
 	gopkg.in/yaml.v3 v3.0.0-20200605160147-a5ece683394c // indirect
