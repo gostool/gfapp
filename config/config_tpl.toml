@@ -79,4 +79,3 @@ exp     = 604800  # 单位s(60*60*24*7)
 
 [qrcode]
 disableBorder = true
-size = 70

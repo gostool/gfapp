@@ -6,7 +6,7 @@ import (
 	"github.com/skip2/go-qrcode"
 )
 
-func (b *baseService) Qrcode(url string) (result []byte, err error) {
+func (b *baseService) Qrcode(url string, size int) (result []byte, err error) {
 	//最常见的二维码
 	q, err := qrcode.New(url, qrcode.Medium)
 	if err != nil {
@@ -16,8 +16,6 @@ func (b *baseService) Qrcode(url string) (result []byte, err error) {
 	qrConf := v.MapStrVar()
 	disableBorder := qrConf["disableBorder"].Bool()
 	q.DisableBorder = disableBorder //去掉边框
-
-	size := qrConf["size"].Int()
 
 	return q.PNG(size)
 }

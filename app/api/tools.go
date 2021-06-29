@@ -6,6 +6,10 @@ import (
 	"gfapp/library/file/oss"
 	"gfapp/library/response"
 
+	"github.com/gogf/gf/util/gconv"
+
+	"github.com/gogf/gf/encoding/gbase64"
+
 	"github.com/gogf/gf/frame/g"
 
 	"github.com/gogf/gf/net/ghttp"
@@ -33,16 +37,28 @@ func (t *toolsApi) Captcha(r *ghttp.Request) {
 
 // @Tags tools
 // @Summary 生成二维码
-// @param url formData string true "用户url"
+// @param   entity  body model.UserApiQrcodeReq true "qrcode请求"
 // @Produce application/json
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"二维码获取成功"}"
 // @Router /api/tools/qrcode [post]
 func (t *toolsApi) Qrcode(r *ghttp.Request) {
-	result, err := service.Base.Qrcode(r.Get("url").(string))
+	var (
+		apiReq     *model.UserApiQrcodeReq
+		serviceReq *model.UserServiceQrcodeReq
+	)
+	if err := r.Parse(&apiReq); err != nil {
+		response.JsonExit(r, response.CODE_BAD, err.Error())
+	}
+	if err := gconv.Struct(apiReq, &serviceReq); err != nil {
+		response.JsonExit(r, response.CODE_ERR, err.Error())
+	}
+	result, err := service.Base.Qrcode(serviceReq.Url, serviceReq.Size)
+	result = gbase64.Encode(result)
+	pre := "data:image/png;base64,"
 	if err != nil {
 		response.JsonExit(r, 1, err.Error())
 	} else {
-		response.JsonExit(r, 0, "ok", result)
+		response.JsonExit(r, 0, "ok", pre+string(result))
 	}
 }
 

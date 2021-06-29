@@ -87,11 +87,13 @@
                 "summary": "生成二维码",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "用户url",
-                        "name": "url",
-                        "in": "formData",
-                        "required": true
+                        "description": "qrcode请求",
+                        "name": "entity",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UserApiQrcodeReq"
+                        }
                     }
                 ],
                 "responses": {
@@ -399,6 +401,17 @@
                     "type": "string"
                 },
                 "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.UserApiQrcodeReq": {
+            "type": "object",
+            "properties": {
+                "size": {
+                    "type": "integer"
+                },
+                "url": {
                     "type": "string"
                 }
             }
