@@ -62,6 +62,32 @@ func (t *toolsApi) Qrcode(r *ghttp.Request) {
 	}
 }
 
+// @Tags tools
+// @Summary 生成二维码
+// @param   entity  body model.UserApiQrcodeReq true "qrcode请求"
+// @Produce image/png
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"二维码获取成功"}"
+// @Router /api/tools/qrcode-img [post]
+func (t *toolsApi) QrcodeImg(r *ghttp.Request) {
+	var (
+		apiReq     *model.UserApiQrcodeReq
+		serviceReq *model.UserServiceQrcodeReq
+	)
+	if err := r.Parse(&apiReq); err != nil {
+		response.JsonExit(r, response.CODE_BAD, err.Error())
+	}
+	if err := gconv.Struct(apiReq, &serviceReq); err != nil {
+		response.JsonExit(r, response.CODE_ERR, err.Error())
+	}
+	result, err := service.Base.Qrcode(serviceReq.Url, serviceReq.Size)
+	if err != nil {
+		response.JsonExit(r, response.CODE_ERR, err.Error())
+	}
+	r.Response.Header().Set("Content-Type", "image/png")
+	r.Response.Write(result)
+	r.Exit()
+}
+
 // Version
 // @Tags tools
 // @Summary 获取版本号

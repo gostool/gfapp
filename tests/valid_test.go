@@ -130,3 +130,18 @@ func TestStruct(t *testing.T) {
 		g.Dump(e.Maps())
 	}
 }
+
+func TestCheckValidUrl(t *testing.T) {
+	type UserApiQrcodeReq struct {
+		Url  string `v:"required|url|length:4,1024#url不能为空|url格式错误|url长度应该在min到max之间"`
+		Size int    `v:"required#size不能为空"`
+	}
+	req := &UserApiQrcodeReq{
+		Url:  "https://www.baidu.com",
+		Size: 60,
+	}
+	err := gvalid.CheckStruct(context.TODO(), req, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+}

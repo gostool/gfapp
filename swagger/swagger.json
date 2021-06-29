@@ -106,6 +106,36 @@
                 }
             }
         },
+        "/api/tools/qrcode-img": {
+            "post": {
+                "produces": [
+                    "image/png"
+                ],
+                "tags": [
+                    "tools"
+                ],
+                "summary": "生成二维码",
+                "parameters": [
+                    {
+                        "description": "qrcode请求",
+                        "name": "entity",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UserApiQrcodeReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"二维码获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/api/tools/upload": {
             "post": {
                 "consumes": [
